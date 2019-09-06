@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+    "name": "Priceedge competitor pricing",
+    "version": "1.0",
+    "description": "Eprice - Chrome extension developed by PriceEdge team for monitoring competitor prices",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.eprice.it/*",
+                "https://www.trony.it/*",
+                "https://monclick.it/*",
+                "https://www.monclick.it/*"
+            ],
+            "js": [ "js/jquery.js", "content.js"],
+            "css": ["css/content.css"]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "options_page": "options.html",
+    // "permissions": ["storage"],
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "declarativeContent", // you can add whatever you want/need,
+        "https://eprice.priceedge.eu/"
+      ]
+}
