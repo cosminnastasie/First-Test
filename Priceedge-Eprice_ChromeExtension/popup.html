@@ -11,14 +11,20 @@
 </head>
 <body>
     <div class='wait-panel'>
-      <div class="centered-box">
-                <div class="wait-label">Loading...</div>
-                <img src="images/wait2.gif" class='wait-img' />
+        <div class="wait-label hide center-text centered-box" id="notTracking">
+            <img src="images/icecream-error.png" class="error-img">
+            <span>Sorry. The system isn't tracking this page.</span>
         </div>
-    </div>
-    <div class="footer-row">
-        <div class="logo-box"><img src="images/logo-priceedge.png" alt="Priceedge logo"></div>
-        <div id="showGraph" class="private-red-button">SHOW GRAPH</div>   
+        <div class="centered-box" id="waitPanel">
+                    <div class="wait-label">Loading...</div>
+                    <img src="images/wait2.gif" class='wait-img' />
+        </div>
+        <div id='login' class='center-text centered-box hide'>
+            <img src="images/logo-priceedge.png" class="logo">
+            <img src="images/image.png" class="info-pic">
+            <span class='wait-label'>To access the extension, you must first log in to <strong>PriceEdge™</strong>.</span>
+            <a href='https://eprice.priceedge.eu/bsLogon.aspx' target='blank' class='private-red-button'>Go to log in page</a>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>

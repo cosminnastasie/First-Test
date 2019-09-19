@@ -1,114 +1,96 @@
 console.log('Content.js loaded');
 
 console.log(window.location.host);
-if (window.location.host == 'www.eprice.it'){
-    productId = $('meta[itemprop=mpn]').attr('content');
-    console.log(productId);
 
-    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-        
-        
-        console.log(message);
+// This should be set for each chrome extension
+// Object containing domain, selector and attr(if needed )that should be found on page, type of the searched Id, competitor name
 
-        // 2. - When popup is opened it sends message with parameters getId=true
-        //    - content finds the id and send it back to popup
-        if (message['getId']){
-            chrome.runtime.sendMessage({
-                data: {
-                    "productId": productId,
-                }
-            }, function (response) {
-                console.log('Id send back: ' + productId);
+let obj = [
+    {'domain': 'www.eprice.it', 'selector': 'meta[itemprop="mpn"]', 'attr': 'content', 'replace': '', 'type': 'id', 'competitor': 'eprice'},
+    {'domain': 'monclick.it', 'selector': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': '', 'type': 'number', 'competitor': 'monclick'},
+    // {'domain': 'monclick.it', 'selector': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '', 'type': 'number', 'competitor': 'monclick'},
+    {'domain': 'www.yeppon.it', 'selector': 'span[itemprop="productID"]', 'attr': 'text', 'replace': '', 'type': 'number', 'competitor': 'yeppon'},
+    {'domain': 'www.onlinestore.it', 'selector': 'input[name="sAdd"]', 'attr': 'value', 'replace': '', 'type': 'number', 'competitor': 'onlinestore'},
+    {'domain': 'www.amazon.it', 'selector': '#ASIN', 'attr': 'value', 'replace': '', 'type': 'number', 'competitor': 'amazon'},
+    {'domain': 'www.mediaworld.it', 'selector': 'h1', 'attr': 'data-prod-detail-id', 'replace': '', 'type': 'number', 'competitor': 'mediaworld'},
+    // {'domain': 'www.unieuro.it', 'selector': 'script[data-flix-ean]', 'attr': 'data-flix-ean', 'replace': '', 'type': 'number', 'competitor': 'unieuro'},
+    {'domain': 'www.unieuro.it', 'selector': 'div[data-productdetail-sku]', 'attr': 'data-productdetail-sku', 'replace': '', 'type': 'number', 'competitor': 'unieuro'},
+    {'domain': 'www.euronics.it', 'selector': '#productId', 'attr': 'value', 'replace': 'eProd', 'type': 'number', 'competitor': 'euronics'},
+    {'domain': 'www.trony.it', 'selector': 'input[name="ProductSKU"]', 'attr': 'value', 'replace': '', 'type': 'number', 'competitor': 'trony'},
+]
+
+
+
+
+// 2) If id is called by popup message:
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    console.log('ok');
+
+    // a) Get needed informations from obj
+    let competitor = '';
+    let type = '';
+    for(var i of obj){
+        console.log(i);
+        console.log(window.location.host);
+        console.log(i['domain']);
+        if (i['domain'] == window.location.host){
+            selector = i['selector'];
+            console.log('selector:');
+            console.log(selector);
+
+            if(i['attr'] == 'text'){
+                productId = $(selector).text();
                 
-            });
-        }
-    })
-}else if(window.location.host == 'monclick.it'){
-    console.log('Monclick');
-    priceCompare();
-
-
-}
-
-function priceCompare(){
-
-    numbers = []
-    $('.mk-productListingTitle h5 a').each(function(){
-        numbers.push($(this).attr('data-product-code'));
-    });
-    
-    console.log(numbers);
-    items = [
-        {'number': 'MPXQ2T/A', 'price': 300, 'diffPerc': 1.2},
-        {'number': 'MK_000000117274', 'price': 900, 'diffPerc': 2.3},
-        {'number': 'MK_000000096527', 'price': 819.9, 'diffPerc': 0.0}
-    ]
-
-    for ( var i = 0; i< items.length; i++){
-        number = items[i]['number']
-        e_Price = items[i]['price']
-        diffPerc = items[i]['diffPerc']
-
-        $('.mk-productListingTitle h5 a').each(function(){
-            c_Price = $(this).attr('data-product-price')
-            c_number = $(this).attr('data-product-code');
-
-            if (number == c_number ){
-                if (parseFloat(c_Price) > e_Price){
-                    $(this).closest('.mk-productListingBox').find('.mk-productListingImage img').addClass('price_success').before('<span class="price_badge"><span class="success_badge">+' + diffPerc + '%</span></span>');
-                }else if(c_Price == e_Price){
-                    $(this).closest('.mk-productListingBox').find('.mk-productListingImage img').addClass('price_info').before('<span class="price_badge"><span class="info_badge">' + diffPerc + '%</span></span>');
-                }else if(c_Price < e_Price){
-                    $(this).closest('.mk-productListingBox').find('.mk-productListingImage img').addClass('price_allert').before('<span class="price_badge"><span class="allert_badge">- ' + diffPerc + '%</span></span>');
-                }
+                console.log(productId);
+            }else{
+                productId = $(selector).attr(i['attr']);
+                console.log(productId);
             }
-        });
-    }
-    
-  
-    console.log('Ajax call')
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://cors-anywhere.herokuapp.com/https://bokhandelsgruppen.priceedge.eu/papi/token",
-        "method": "POST",
-        "headers": {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Accept": "*/*",
-          "Cache-Control": "no-cache",
-          "Postman-Token": "4b513783-ca78-4c40-bac5-7272e743b4bf,6e9e3ab8-c3ee-4e90-a2fd-630d6a0f1093",
-          "cache-control": "no-cache"
-        },
-        "data": {
-          "username": "scraper",
-          "password": "!scraper2018",
-          "grant_type": "password",
-          "client_id": "scraper"
+            if (i['replace'] != ''){
+                productId = productId.replace(i['replace'], '');
+            }
+            console.log(productId);
+            type = i['type'];
+            competitor = i['competitor']
+            break;
         }
-      }
-      $.ajax(settings).done(function (response) {
+    }
 
-            token = response['access_token']
-            var settings = {
-                "async": true,
-                "crossDomain": true,
-                "url": "https://cors-anywhere.herokuapp.com/https://bokhandelsgruppen.priceedge.eu/papi/api/items/views/viewCollect_ScrapeBokusItems_p1",
-                "method": "POST",
-                "headers": {
-                  "Authorization": "Bearer " + token,
-                  "Content-Type": "application/json",
-                  "clientId": "scraper",
-                  "Accept": "*/*",
-                  "Cache-Control": "no-cache",
-                  "Postman-Token": "b68d7c0a-ab10-4d40-a676-c749ed2b5308,6e103d47-64e2-4b4b-8904-c4a2c473eb23",
-                  "cache-control": "no-cache"
-                },
-                "processData": false,
-                "data": "{\n\t\"PageNumber\": 1,\n\t\"RecordsOnPage\": 100\n}"
-              }
-              $.ajax(settings).done(function (response) {
-                console.log(response);
-              });
-      });
-    console.log('Ajax finish');
-}
+    //  b.1) if product id or number is found, it will be sended to popup with type and competitor infos
+    if (typeof productId !== 'undefined'){
+        
+            console.log(productId);
+            console.log(type);
+            
+            // B - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
+            //    - content finds the id and send it back to popup
+            if (message['getId']){
+                console.log('Iddddd');
+                console.log(productId);
+
+                chrome.runtime.sendMessage({
+                    data: {
+                        "productId": productId,
+                        "type": type,
+                        "competitor": competitor
+                    }
+                }, function (response) {
+                    console.log('Id send back: ' + productId);   
+                });
+            }
+    //  b.2) If product Id is not found, send back not found message  
+    }else{
+        console.log('not on the page');
+        chrome.runtime.sendMessage({
+            data: {
+                "notFound": 'notFound',
+                
+            }
+        }, function (response) {
+            console.log('NOt found send back: ' + response);   
+        });
+    }    
+})
+
+
+

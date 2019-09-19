@@ -48,32 +48,42 @@ iframe{
     z-index:3;
 }
 
-.footer-row {
+.hide {
+    display: none;
+} 
+
+.center-text{
+    max-width: 64%;
+    text-align: center;
+}
+
+.centered-box.hide {
+    display: none;
+}
+
+.centered-box {
     display: flex;
-    width: 100%;
-    height: 40px;
-    position: absolute;
-    bottom: 42px;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.logo-box {
-    z-index: 4;
+.centered-box .error-img{
+    width: 150px;
+    margin-bottom: 40px;
 }
 
-.logo-box img {
-    width: 205px;
-}
-
-.private-red-button{	
+.private-red-button,
+.private-red-button:hover,
+.private-red-button:active,
+.private-red-button:focus{	
 	background-color: #e7556a !important;
     border: 1px solid #e7556a !important;
     color: #fff !important;
+	display: flex;
     border-radius: 3px !important;
     font-size: 14px !important;
-    height: 20px!important;
+    /* height: 36px!important; */
     cursor: pointer;
     padding-top: 6px !important;
     padding-bottom: 8px !important;
@@ -81,4 +91,18 @@ iframe{
     padding-left: 22px !important;
     margin-top: 8px;
     z-index: 4;
+    text-decoration: none;
+}
+
+#login .private-red-button{
+    position: relative;
+    top: 61px;
+}
+
+.logo{
+    width: 205px;
+}
+
+.info-pic{
+    width: 370px;
 }

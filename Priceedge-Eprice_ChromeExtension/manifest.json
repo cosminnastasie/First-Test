@@ -9,7 +9,16 @@
                 "https://www.eprice.it/*",
                 "https://www.trony.it/*",
                 "https://monclick.it/*",
-                "https://www.monclick.it/*"
+                "https://www.monclick.it/*",
+                "https://www.yeppon.it/*",
+                "https://www.amazon.it/*",
+                "https://www.onlinestore.it/*",
+                "https://onlinestore.it/*",
+                "https://www.amazon.it/*",
+                "https://www.mediaworld.it/*",
+                "https://www.unieuro.it/*",
+                "https://www.euronics.it/*",
+                "https://www.trony.it/*"
             ],
             "js": [ "js/jquery.js", "content.js"],
             "css": ["css/content.css"]
