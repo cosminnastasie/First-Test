@@ -104,15 +104,6 @@ $.ajax({
 
 
 
-
-    
-
-    
-
-
-
-
-
 // 3. Content send product Id to popup which sets call priceedge into iframe and set Id on src
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log('Message received');
@@ -123,6 +114,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log(message);
 
     if(message['data'].productId != undefined){
+        productId = encodeURIComponent(productId)
+        console.log(productId);
         // src = 'http://localhost/Blueberry/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         

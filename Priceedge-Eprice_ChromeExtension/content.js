@@ -38,6 +38,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             console.log('selector:');
             console.log(selector);
 
+            console.log($(selector).length);
+
             if(i['attr'] == 'text'){
                 productId = $(selector).text();
                 
@@ -46,6 +48,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                 productId = $(selector).attr(i['attr']);
                 console.log(productId);
             }
+
+
             if (i['replace'] != ''){
                 productId = productId.replace(i['replace'], '');
             }
@@ -59,15 +63,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     //  b.1) if product id or number is found, it will be sended to popup with type and competitor infos
     if (typeof productId !== 'undefined'){
         
-            console.log(productId);
-            console.log(type);
             
             // B - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
             //    - content finds the id and send it back to popup
             if (message['getId']){
                 console.log('Iddddd');
                 console.log(productId);
-
                 chrome.runtime.sendMessage({
                     data: {
                         "productId": productId,
@@ -87,7 +88,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                 
             }
         }, function (response) {
-            console.log('NOt found send back: ' + response);   
+            console.log('Not found. Send back: ' + response);   
         });
     }    
 })
