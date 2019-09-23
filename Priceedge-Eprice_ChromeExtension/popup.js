@@ -63,13 +63,10 @@ function IsJsonString(str) {
 
 $.ajax({
     method: 'POST',
-    url: 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting',
-    // data: {},
-    beforeSend: function(){console.log('ok')}
+    url: 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting'
 }).done(function(data){
     if (IsJsonString(data)){
         
-
         // 1. When Popup is called it checks if the url is inside an allowed domain -> send the message to content to get the product Id or competitor Number
 
         //Get tab info; check if it's on a tracked page
@@ -94,7 +91,7 @@ $.ajax({
 
 
     }else{
-        console.log('loggedOut');
+        console.log('User is Logged Out');
 
         $('#waitPanel').addClass('hide');
         $('#login').removeClass('hide');
@@ -107,11 +104,11 @@ $.ajax({
 // 3. Content send product Id to popup which sets call priceedge into iframe and set Id on src
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log('Message received');
+    console.log(message);
     productId = message['data'].productId;
     var type = message['data'].type;
     var competitor = message['data'].competitor;
 
-    console.log(message);
 
     if(message['data'].productId != undefined){
         productId = encodeURIComponent(productId)
@@ -123,7 +120,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         $('#showGraph').removeClass('hide');
     
     }else{
-
         $('#notTracking').html('<img src="images/icecream-error.png" class="error-img"><span>Product id not found on page. Please reload the page or try another product!</span>').removeClass("hide");
         $('#waitPanel').hide();
     }
