@@ -1,4 +1,4 @@
-.price_allert, .allert_badge {
+/* .price_allert, .allert_badge {
     border-color: orange !important;
     box-shadow: 0 0 5px 1px orange, 0 0 0 1px orange;
     border: 1px solid orange;
@@ -45,5 +45,114 @@
     padding: 0;
     width: 86px; 
     z-index: 9;
+} */
+
+
+.item-parent-box {
+    position: relative !important;
+    
 }
+
+.success-info{
+    border: 2px solid green !important;
+    -webkit-box-shadow: 0 0 5px green;
+    box-shadow: 0 0 5px green;
+}
+.alert-info {
+    border: 2px solid red !important;
+    -webkit-box-shadow: 0 0 5px red;
+    box-shadow: 0 0 5px red;
+}
+.primary-info {
+    border: 2px solid orange !important;
+    -webkit-box-shadow: 0 0 5px orange;
+    box-shadow: 0 0 5px orange;
+}
+
+.item-info-text {
+    /* border: 1px solid red; */
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: ;
+}
+
+.item-info-text span{
+    z-index: 99999;
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 0;
+    width: 86px; 
+    border: 2px solid orange;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding: 1px;
+}
+
+/* Alert box */
+
+.info-alert-box {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
+    background: #f7f7f7;
+    /* padding: 8px 12px; */
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 3px;
+    box-shadow: 0 0 10px lightgrey;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    padding: 12px 16px;
+    justify-content: center;
+    width: 340px;
+    font-size: 15px;
+    line-height: 23px;
+    height: 64px;
+}
+
+.info-alert-box a{
+    color: #0091ae;
+
+    /* text-decoration: underline; */
+}
+
+.info-alert-box .info-text{
+
+}
+
+.close-info-box {
+    margin: 0 0 0 8px;
+    cursor: pointer;
+}
+
+.private-red-button,
+.private-red-button:hover,
+.private-red-button:active,
+.private-red-button:focus{	
+    background-color: #e7556a !important;
+    border: 1px solid #e7556a !important;
+    color: #fff !important;
+    display: flex;
+    border-radius: 3px !important;
+    font-size: 14px !important;
+    /* height: 36px!important; */
+    cursor: pointer;
+    padding-top: 6px !important;
+    padding-bottom: 8px !important;
+    padding-right: 22px !important;
+    padding-left: 22px !important;
+    margin-top: 8px;
+    z-index: 4;
+    text-decoration: none;
+    }
+
 

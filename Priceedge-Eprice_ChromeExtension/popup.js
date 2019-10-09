@@ -65,6 +65,7 @@ $.ajax({
     method: 'POST',
     url: 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting'
 }).done(function(data){
+    console.log(data);
     if (IsJsonString(data)){
         
         // 1. When Popup is called it checks if the url is inside an allowed domain -> send the message to content to get the product Id or competitor Number

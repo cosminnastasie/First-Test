@@ -18,7 +18,10 @@
                 "https://www.mediaworld.it/*",
                 "https://www.unieuro.it/*",
                 "https://www.euronics.it/*",
-                "https://www.trony.it/*"
+                "https://www.trony.it/*",
+                "http://localhost/*",
+                "https://eprice.priceedge.eu/*",
+                "https://cors-anywhere.herokuapp.com/*"
             ],
             "js": [ "js/jquery.js", "content.js"],
             "css": ["css/content.css"]
@@ -28,11 +31,11 @@
         "default_popup": "popup.html"
     },
     "options_page": "options.html",
-    // "permissions": ["storage"],
     "permissions": [
         "tabs",
         "activeTab",
         "declarativeContent", // you can add whatever you want/need,
-        "https://eprice.priceedge.eu/"
+        "https://eprice.priceedge.eu/",
+        "https://eprice.priceedge.eu/*"
       ]
 }
