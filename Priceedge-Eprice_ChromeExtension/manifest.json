@@ -20,8 +20,7 @@
                 "https://www.euronics.it/*",
                 "https://www.trony.it/*",
                 "http://localhost/*",
-                "https://eprice.priceedge.eu/*",
-                "https://cors-anywhere.herokuapp.com/*"
+                "https://eprice.priceedge.eu/*"
             ],
             "js": [ "js/jquery.js", "content.js"],
             "css": ["css/content.css"]
@@ -36,6 +35,11 @@
         "activeTab",
         "declarativeContent", // you can add whatever you want/need,
         "https://eprice.priceedge.eu/",
-        "https://eprice.priceedge.eu/*"
-      ]
+        "https://www.eprice.it/*",
+        "https://eprice.priceedge.eu/*",
+         "<all_urls>", "contextMenus"
+    ],
+    "background": {
+        "scripts": ["js/jquery.js", "background.js"]
+    }
 }

@@ -1,9 +1,7 @@
 console.log('Content.js loaded');
 
-console.log(window.location.host);
+// -------------- Chrome extension settings
 
-// This should be set for each chrome extension
-// Object containing domain, selector and attr(if needed )that should be found on page, type of the searched Id, competitor name
 let ranges = {
     min: -2,
     max: 2
@@ -22,7 +20,11 @@ let obj = [
     {'domain': 'www.trony.it', 'selector': [{'sel': 'input[name="ProductSKU"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'trony'},
 ]
 
-let loginUrl = 'https://eprice.priceedge.eu';
+let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
+
+// -------------- end Chrome extension settings
+
+
 
 
 function IsJsonString(str) {
@@ -33,22 +35,6 @@ function IsJsonString(str) {
     }
     return true;
 }
-
-$.ajax({
-    method: 'POST',
-    // url: 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting',
-    url: "http://localhost/Blueberry/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting",
-
-}).done(function(data){
-    console.log(data);
-    if (! IsJsonString(data)){
-        console.log('Not logged in');
-        // $('body').append('<div class="info-alert-box"> <div class="info-text">To access the extension features, you must first <a href="' + loginUrl + '" target="blank"> log in to PriceEdge™</a></div><span id="closeInfoBox" onclick="parentNode.remove()" class="close-info-box">&#10006;<span></div>');
-    }else{
-        console.log('Logged in ');
-    }
-})
-
 
 
 
@@ -68,7 +54,9 @@ for(var i of obj){
         
         // 2) If id is called by popup message:
         chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-            // console.log('Meesage received');
+            console.log('Meesage received');
+            console.log(message);
+            if (message['getId']){//Message from popup
                     // console.log('Selectors loop');
                     var selector = '';
                     var replace = '';
@@ -103,10 +91,9 @@ for(var i of obj){
                     //  b.1) if product id or number is found, it will be sended to popup with type and competitor infos
                     if (typeof productId !== 'undefined'){
                         
-                            
                             // B - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
                             //    - content finds the id and send it back to popup
-                            if (message['getId']){
+                            
 
                                 chrome.runtime.sendMessage({
                                     data: {
@@ -117,7 +104,7 @@ for(var i of obj){
                                 }, function (response) {
                                     console.log('Id send back: ' + productId);   
                                 });
-                            }
+                            
                     //  b.2) If product Id is not found, send back not found message  
                     }else{
                         console.log('Id not found on the page');
@@ -130,10 +117,11 @@ for(var i of obj){
                             console.log('Not found. Send back: ' + response);   
                         });
                     } 
+            }
         })
             
 
-        // --------------------- end popup
+        // --------------------- end Popup logic
 
 
 
@@ -144,21 +132,22 @@ for(var i of obj){
 
 
 
-        // -------- Product pages list
+        // --------------------- Start Products-list pages logic 
 
         
         
-        // 1. Check if page is products list page
+        // 1. Set selectors from obj: 
+        // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
+        // - selector of highlight element - highlightElement (different for grid or list layout)
+
+
+
         console.log('Check if page is products list page');
         var productsListSelector = '';
         var attrStr = '';
         var replaceStr = '';
         var parentBoxSelector = '';
-        var highlightElement = ''
-
-        // 2. Set selectors from obj: 
-        // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
-        // - selector of highlight element - highlightElement (different for grid or list layout)
+        var highlightElement = ''        
 
         for (var t of i['selector']['productsListSelector']){
             // console.log(t);
@@ -167,8 +156,7 @@ for(var i of obj){
                 attrStr = t['attr'];
                 replaceStr = t['replace'];
                 parentBoxSelector = t['parentBoxSelector']
-                
-
+            
                 console.log('Layout selectors');
                 console.log(t['layoutSelectors']);
                 
@@ -185,77 +173,80 @@ for(var i of obj){
 
 
 
-        //3. Check productsListSelector array to see if location is on a product list page
+        //2. Check productsListSelector array to see if location is on a product list page
         // If selector exists on page => location on product lists pages
 
         if ($(productsListSelector).length ){
             
+            var typeStr = i['type'];
+            var competitorName = window.location.host.replace('www.', '').split('.')[0];
             var idsArr = []
-            
+            var idsStr = ''
             $(productsListSelector).each(function(){
                 idsArr.push($(this).attr(attrStr).replace(replaceStr, ''));
+                idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
             });
-            typeStr = i['selector']['productsListSelector'];
-            // console.log('IdsArr:');
-            // console.log(idsArr);
-            // console.log(JSON.stringify(idsArr));
-            var competitorName = window.location.host.replace('www.', '').split('.')[0];
-            
-            // 4. Send ids to database and receive data: list of ids, deviation
-            $.ajax({
-                method: 'POST',
-                data: {
-                    idsList: JSON.stringify(idsArr),
-                    competitor: competitorName,
-                    idType: i['type']
-                },
-                cache: false,
-                url: 'http://localhost/Blueberry/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorDeviation',
-                // url: 'https://cors-anywhere.herokuapp.com/http://localhost/Blueberry/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorDeviation',
-                // url: 'https://cors-anywhere.herokuapp.com/https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorDeviation',
-                
-            }).done(function(deviationData){
-                console.log(deviationData);
-                if (deviationData){
-                    eval(deviationData);
-                    var result = competitorDeviation;
-                    
-                    console.log('Loop');
-                    console.log(result );
-                    // 5. Go to result list, get ids and deviation and add them back in the page withi needed highlight
-                    $(productsListSelector).each(function(){
-                        for (var r of result){
-                            if ($(this).attr(attrStr).indexOf(r['Number']) > -1){
-                                var deviationStr = r['Deviation'];
-                                var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-                                console.log('Dev perc');
-                                console.log(deviation);
-                                statusClass = '';
-                                if (deviation < ranges.min){
-                                    statusClass = 'success-info';
-                                }else if(deviation > ranges.max){
-                                    statusClass = 'alert-info';
-                                }else{
-                                    statusClass = 'primary-info';
-                                }
-                                console.log('Highlight el');
-                                console.log(highlightElement);
-                                // $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');;
-                            }
-                        }
-                    });
-                }else{
-                    alert ('For using Chrome extension features, you need to login');
-                }
-                
+            console.log(idsStr);
+            console.log(typeStr);
+            console.log(competitorName);
+            console.log(idsArr);
 
-            })         
+
+            // ##############################################
+
+
+            chrome.runtime.sendMessage(
+                {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr},
+            )
+
+
+            chrome.runtime.onMessage.addListener(
+                function(message, sender, sendResponse) {
+                    console.log('Content.js messaging:');
+
+                    if (message.dataType == 'productList'){
+                        console.log(message.data.data);
+
+                        $(productsListSelector).each(function(){
+                            for (var r of message.data.data){
+                                console.log(r);
+                                if ($(this).attr(attrStr).indexOf(r['Number']) > -1){
+                                    var deviationStr = r['Deviation'];
+                                    var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
+                                    console.log('Dev perc');
+                                    console.log(deviation);
+                                    statusClass = '';
+                                    if (deviation < ranges.min){
+                                        statusClass = 'success-info';
+                                    }else if(deviation > ranges.max){
+                                        statusClass = 'alert-info';
+                                    }else{
+                                        statusClass = 'primary-info';
+                                    }
+                                    console.log('Highlight el');
+                                    console.log(highlightElement);
+                                    // $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                    $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');;
+                                }
+                            }
+                        });
+                    }
+
+                    
+                }
+            );
+
+            // #################################################
+
+
+
+
+            
             console.log(i['selector']['productsListSelector'])
         }
 
 
-        // ---------- end of product pages list
+        // --------------------- End Product-list pages
         
 
 
