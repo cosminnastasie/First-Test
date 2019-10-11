@@ -8,7 +8,48 @@ let ranges = {
 }
 
 let obj = [
-    {'domain': 'www.eprice.it', 'selector': {'popupSelector': [ {'sel': 'meta[itemprop="mpn"]', 'attr': 'content', 'replace': ''}], 'productsListSelector': [{'sel':'.item .stelline', 'attr': 'id', 'replace': 'BVRRInlineRating-', 'parentBoxSelector': '.row', 'layoutSelectors': { 'gridLayoutParent': '#esempioGriglia', 'gridHighlightEl': '.item', 'listLayoutParent': '#esempioLista', 'listHighlightEl': '.linkImg'}}]},  'type': 'id', 'competitor': 'eprice'},
+    { 
+        'domain':'www.eprice.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'meta[itemprop="mpn"]',
+                 'attr':'content',
+                 'replace':''
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': 'productImage',
+                    'sel': '.ep_prodListing .ep_prodImg img',
+                    'attr': 'src',
+                    'replace': '',
+                    'splitKey': -2,
+                    'parentBoxSelector': 'a.ep_prodListing',
+                    'layoutSelectors':{},
+                    'highlightElement': 'a.ep_prodListing'
+                },
+                {
+                    'target': '',
+                    'sel': '.item .stelline',
+                    'attr': 'id',
+                    'replace': 'BVRRInlineRating-',
+                    'splitKey': 0,
+                    'parentBoxSelector': '.row',
+                    'layoutSelectors':{ 
+                        'gridLayoutParent':'#esempioGriglia',
+                        'gridHighlightEl':'.item',
+                        'listLayoutParent':'#esempioLista',
+                        'listHighlightEl':'.linkImg'
+                    },
+                    'highlightElement': ''
+                }
+           ]
+        },
+        'type':'id',
+        'competitor':'eprice'
+    },
+    {'domain':'monclick.it','selector':{'popupSelector':[{'sel':'.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]','attr':'data-product-code','replace':''},{'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],'productPageSelector': [{'target': 'productImage','sel': '.ep_prodListing .ep_prodImg img','attr': 'src','replace': '','splitKey': -2,'parentBoxSelector': 'a.ep_prodListing','layoutSelectors':{},'highlightElement': 'a.ep_prodListing'}]},'type':'number','competitor':'monclick'},
 
     {'domain': 'monclick.it', 'selector': [ {'sel': '#test', 'attr': 'content', 'replace': ''}, {'sel': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': ''}, {'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],  'type': 'number', 'competitor': 'monclick'},   
     {'domain': 'www.yeppon.it', 'selector': [{'sel':'span[itemprop="productID"]', 'attr': 'text', 'replace': ''}], 'type': 'number', 'competitor': 'yeppon'},
@@ -21,6 +62,7 @@ let obj = [
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
+let login = 'https://eprice.priceedge.eu/';
 
 // -------------- end Chrome extension settings
 
@@ -147,26 +189,42 @@ for(var i of obj){
         var attrStr = '';
         var replaceStr = '';
         var parentBoxSelector = '';
-        var highlightElement = ''        
+        var highlightElement = '';
+        var splitKey = 0;   
+        var target = '';     
 
-        for (var t of i['selector']['productsListSelector']){
-            // console.log(t);
-            if ($(t['sel']).length> 0){
+        for (var t of i['selector']['productPageSelector']){
+            if ($(t['sel']).length > 0){
                 productsListSelector = t['sel'];
                 attrStr = t['attr'];
                 replaceStr = t['replace'];
                 parentBoxSelector = t['parentBoxSelector']
-            
-                console.log('Layout selectors');
-                console.log(t['layoutSelectors']);
-                
-                if ($(t['layoutSelectors']['gridLayoutParent']).length){
-                    highlightElement = t['layoutSelectors']['gridHighlightEl'];
-                    console.log('Grid');
-                }else if ($(t['layoutSelectors']['listLayoutParent']).length){
-                    highlightElement = t['layoutSelectors']['listHighlightEl'];
-                    console.log('List');
+                splitKey = t['splitKey'];
+                target = t['target']
+
+                // console.log('Layout selectors');
+                // console.log(t['layoutSelectors']);
+
+
+                if(t['highlightElement'] == ''){
+                    if ($(t['layoutSelectors']['gridLayoutParent']).length){
+                        highlightElement = t['layoutSelectors']['gridHighlightEl'];
+                        console.log('Grid');
+                    }else if ($(t['layoutSelectors']['listLayoutParent']).length){
+                        highlightElement = t['layoutSelectors']['listHighlightEl'];
+                        console.log('List');
+                    }
+                }else{
+                    highlightElement = t['highlightElement']
                 }
+
+                console.log('productsListSelector: ' + productsListSelector);
+                console.log('attrStr: ' + attrStr);
+                console.log('replaceStr: ' + replaceStr);
+                console.log('parentBoxSelector: ' + parentBoxSelector);
+                console.log('highlightElement: ' + highlightElement);
+                console.log('splitKey: ' + splitKey);
+                
                 break;
             }
         }
@@ -177,22 +235,35 @@ for(var i of obj){
         // If selector exists on page => location on product lists pages
 
         if ($(productsListSelector).length ){
-            
+            // console.log('Exista');
             var typeStr = i['type'];
             var competitorName = window.location.host.replace('www.', '').split('.')[0];
             var idsArr = []
-            var idsStr = ''
-            $(productsListSelector).each(function(){
-                idsArr.push($(this).attr(attrStr).replace(replaceStr, ''));
-                idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
-            });
+            var idsStr = '['
+
+            if (target != 'productImage'){
+                $(productsListSelector).each(function(){
+                    idsArr.push($(this).attr(attrStr).replace(replaceStr, ''));
+                    idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
+                });
+            }else{
+                $(productsListSelector).each(function(){
+                    var imgSrc = $(this).attr(attrStr).replace(replaceStr, '');
+                    var getIdArr = imgSrc.split('/');
+                    var id = getIdArr[getIdArr.length + splitKey]
+                    idsStr += '"' + id + '",';
+                   
+                })
+                idsStr += ']';
+            }
+            
             console.log(idsStr);
             console.log(typeStr);
             console.log(competitorName);
             console.log(idsArr);
 
 
-            // ##############################################
+            // ############################################## Messaging to background
 
 
             chrome.runtime.sendMessage(
@@ -209,12 +280,15 @@ for(var i of obj){
 
                         $(productsListSelector).each(function(){
                             for (var r of message.data.data){
-                                console.log(r);
+                                // console.log(r);
+                                // console.log($(this).attr(attrStr));
+
+                                
                                 if ($(this).attr(attrStr).indexOf(r['Number']) > -1){
                                     var deviationStr = r['Deviation'];
                                     var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-                                    console.log('Dev perc');
-                                    console.log(deviation);
+                                    // console.log('Dev perc');
+                                    // console.log(deviation);
                                     statusClass = '';
                                     if (deviation < ranges.min){
                                         statusClass = 'success-info';
@@ -223,13 +297,21 @@ for(var i of obj){
                                     }else{
                                         statusClass = 'primary-info';
                                     }
-                                    console.log('Highlight el');
-                                    console.log(highlightElement);
+                                    // console.log('Highlight el');
+                                    // console.log(highlightElement);
                                     // $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                    $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');;
+                                    if (parentBoxSelector != highlightElement){
+                                        $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                    }else{
+                                        $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                    }
+                                    
                                 }
                             }
                         });
+                    }else if(message.dataType == 'loginCheck'){
+                        console.log('Not logged in');
+                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div><div class="footer-box"><a href="'+login+'" class="private-red-button">Go to log in page</a></div></div>');
                     }
 
                     
@@ -242,7 +324,7 @@ for(var i of obj){
 
 
             
-            console.log(i['selector']['productsListSelector'])
+            // console.log(i['selector']['productPageSelector'])
         }
 
 
