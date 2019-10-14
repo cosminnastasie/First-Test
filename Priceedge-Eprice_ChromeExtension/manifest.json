@@ -37,6 +37,7 @@
         "https://eprice.priceedge.eu/",
         "https://www.eprice.it/*",
         "https://eprice.priceedge.eu/*",
+        "https://www.yeppon.it/*",
          "<all_urls>", "contextMenus"
     ],
     "background": {
