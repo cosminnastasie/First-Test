@@ -49,9 +49,42 @@ let obj = [
         'type':'id',
         'competitor':'eprice'
     },
-    {'domain':'monclick.it','selector':{'popupSelector':[{'sel':'.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]','attr':'data-product-code','replace':''},{'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],'productPageSelector': [{'target': 'productImage','sel': '.ep_prodListing .ep_prodImg img','attr': 'src','replace': '','splitKey': -2,'parentBoxSelector': 'a.ep_prodListing','layoutSelectors':{},'highlightElement': 'a.ep_prodListing'}]},'type':'number','competitor':'monclick'},
+    { 
+        'domain':'monclick.it',
+        'selector':{ 
+            'popupSelector':[ 
+                { 
+                    'sel':'.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]',
+                    'attr':'data-product-code',
+                    'replace':''
+                },
+                { 
+                    'sel':'span[itemprop="identifier"]',
+                    'attr':'text',
+                    'replace':''
+                }
+            ],
+            'productPageSelector':[ 
+                { 
+                    'target':'',
+                    'sel':'.mainListingContainer .mk-listingProduct .mk-productListingImage a[data-product-code]',
+                    'attr':'data-product-code',
+                    'replace':'',
+                    'splitKey':0,
+                    'parentBoxSelector':'div',
+                    'layoutSelectors':{ 
 
-    {'domain': 'monclick.it', 'selector': [ {'sel': '#test', 'attr': 'content', 'replace': ''}, {'sel': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': ''}, {'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],  'type': 'number', 'competitor': 'monclick'},   
+                    },
+                    'highlightElement':'div'
+                }
+            ]
+        },
+        'type':'number',
+        'competitor':'monclick'
+    },
+    // {'domain':'monclick.it','selector':{'popupSelector':[{'sel':'.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]','attr':'data-product-code','replace':''},{'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],'productPageSelector': [{'target': 'productImage','sel': '.ep_prodListing .ep_prodImg img','attr': 'src','replace': '','splitKey': -2,'parentBoxSelector': 'a.ep_prodListing','layoutSelectors':{},'highlightElement': 'a.ep_prodListing'}]},'type':'number','competitor':'monclick'},
+
+    // {'domain': 'monclick.it', 'selector': [ {'sel': '#test', 'attr': 'content', 'replace': ''}, {'sel': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': ''}, {'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],  'type': 'number', 'competitor': 'monclick'},   
     {'domain': 'www.yeppon.it', 'selector': [{'sel':'span[itemprop="productID"]', 'attr': 'text', 'replace': ''}], 'type': 'number', 'competitor': 'yeppon'},
     {'domain': 'www.onlinestore.it', 'selector': [{'sel': 'input[name="sAdd"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'onlinestore'},
     {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
@@ -62,7 +95,7 @@ let obj = [
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
-let login = 'https://eprice.priceedge.eu/';
+let login = 'https://staging.priceedge.eu/eprice';
 
 // -------------- end Chrome extension settings
 
@@ -311,7 +344,7 @@ for(var i of obj){
                         });
                     }else if(message.dataType == 'loginCheck'){
                         console.log('Not logged in');
-                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div><div class="footer-box"><a href="'+login+'" class="private-red-button">Go to log in page</a></div></div>');
+                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
                     }
 
                     

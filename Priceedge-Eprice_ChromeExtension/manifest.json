@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Priceedge competitor pricing",
-    "version": "1.0",
+    "version": "2.0",
     "description": "Eprice - Chrome extension developed by PriceEdge team for monitoring competitor prices",
     "content_scripts": [
         {

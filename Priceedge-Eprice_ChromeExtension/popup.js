@@ -1,14 +1,7 @@
 console.log('Popup js loaded');
 
-let message = {
-    "getId": true
-};
-let params = {
-    active: true,
-    currentWindow: true
-}
+// -------------- Chrome settings
 
-// This should be set for each chrome extension
 let domains = [
     'https://www.eprice.it/',
     'https://monclick.it/',
@@ -25,6 +18,13 @@ let blackUrlsList = [
     'https://www.eprice.it/s/',
     'https://www.eprice.it/prodotti/'
 ]
+
+// -------------- end Chrome settings
+
+let params = {
+    active: true,
+    currentWindow: true
+}
 
 function checkUrl(url){
     let allowed = false;
@@ -77,7 +77,9 @@ $.ajax({
             url =  currentTab['url']         
             
             if (checkUrl(url)){
-
+                var message = {
+                    "getId": true
+                };
                 chrome.tabs.query(params, function(tabs){
                     chrome.tabs.sendMessage( tabs[0].id, message);
                     console.log('Popup sended message');
