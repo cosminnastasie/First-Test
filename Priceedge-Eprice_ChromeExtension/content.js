@@ -381,7 +381,6 @@ for(var i of obj){
                         productId = productId.replace(replace, '');
                     }
 
-
                     type = i['type'];
                     competitor = i['competitor'].split(',')[0]
 
