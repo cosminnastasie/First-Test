@@ -42,7 +42,9 @@ let obj = [
                         'listLayoutParent':'#esempioLista',
                         'listHighlightEl':'.linkImg'
                     },
-                    'highlightElement': ''
+                    'highlightElement': '',
+                    'listWrapper':'',
+                    'dinamicPage': false
                 }
            ]
         },
@@ -73,10 +75,10 @@ let obj = [
                     'replace':'',
                     'splitKey':0,
                     'parentBoxSelector':'div',
-                    'layoutSelectors':{ 
-
-                    },
-                    'highlightElement':'div'
+                    'layoutSelectors':{},
+                    'highlightElement':'div',
+                    'listWrapper':'',
+                    'dinamicPage': false
                 }
             ]
         },
@@ -84,7 +86,6 @@ let obj = [
         'competitor':'monclick',
         'timeout': 0
     },
-
     // {'domain': 'monclick.it', 'selector': [ {'sel': '#test', 'attr': 'content', 'replace': ''}, {'sel': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': ''}, {'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],  'type': 'number', 'competitor': 'monclick'},   
     { 
         'domain':'www.yeppon.it',
@@ -110,7 +111,9 @@ let obj = [
                         'listLayoutParent':'.list-products',
                         'listHighlightEl':'.card-image'
                     },
-                    'highlightElement': ''
+                    'highlightElement': '',
+                    'listWrapper': '.category-products. ng-star-inserted',
+                    'dinamicPage': true
                 }
            ]
         },
@@ -138,7 +141,9 @@ let obj = [
                     'splitKey': -1,
                     'parentBoxSelector': '.box--content',
                     'layoutSelectors':{},
-                    'highlightElement': '.box--content'
+                    'highlightElement': '.box--content',
+                    'listWrapper' : '.listing',
+                    'dinamicPage': true
                 }
            ]
         },
@@ -147,11 +152,200 @@ let obj = [
         'timeout': 0
     },
     // {'domain': 'www.onlinestore.it', 'selector': [{'sel': 'input[name="sAdd"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'onlinestore'},
+    { 
+        'domain':'www.mediaworld.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'h1',
+                 'attr':'data-prod-detail-id',
+                 'replace':''
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': 'productImage',//used when getting the id from an Url which request split. Set to empty if not
+                    'sel': '.product-image_cont a', //Selector from where the id comes
+                    'attr': 'href',
+                    'replace': '',
+                    'splitKey': -2,
+                    'parentBoxSelector': 'article',// parent of sel
+                    'layoutSelectors':{ 
+                        'gridLayoutParent':'.display-mode-grid.active',
+                        'gridHighlightEl':'article',
+                        'listLayoutParent':'.display-mode-list.active',
+                        'listHighlightEl':'.col-1'
+                    },
+                    'highlightElement': '',// used to highlight element. If grid/list option available it should be empty
+                    'listWrapper' : '',//element used on checking if page content has changed
+                    'dinamicPage': false
+                }
+           ]
+        },
+        'type':'number',
+        'competitor':'mediaworld',
+        'timeout': 0
+    },
+    // {'domain': 'www.mediaworld.it', 'selector': [{'sel': 'h1', 'attr': 'data-prod-detail-id', 'replace': ''}], 'type': 'number', 'competitor': 'mediaworld'},
+    
+    { 
+        'domain':'www.unieuro.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'div[data-productdetail-sku]',
+                 'attr':'data-productdetail-sku',
+                 'replace':''
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': '',
+                    'sel': 'article[data-product-tile-sku]',
+                    'attr': 'data-product-tile-sku',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': 'section',
+                    'layoutSelectors':{ 
+                        // 'gridLayoutParent':'.grid-products',
+                        // 'gridHighlightEl':'mat-card',
+                        // 'listLayoutParent':'.list-products',
+                        // 'listHighlightEl':'.card-image'
+                    },
+                    'highlightElement': 'article',
+                    'listWrapper': '#listing-result',
+                    'dinamicPage': true
+                }
+           ]
+        },
+        'type':'number',
+        'competitor':'unieuro',
+        'timeout': 5000
+    },
+    
+    // {'domain': 'www.unieuro.it', 'selector': [{'sel':'div[data-productdetail-sku]', 'attr': 'data-productdetail-sku', 'replace': ''}], 'type': 'number', 'competitor': 'unieuro'},
+
+    { 
+        'domain':'www.euronics.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'#productId',
+                 'attr':'value',
+                 'replace':'eProd'
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': '',
+                    'sel': '#log_prodotto',
+                    'attr': 'value',
+                    'replace': 'product:eProd',
+                    'splitKey': 0,
+                    'parentBoxSelector': '.productCard',
+                    'layoutSelectors':{ 
+                        // 'gridLayoutParent':'.wrapContent:not(.cardHorizontal) ',
+                        // 'gridHighlightEl':'.productCard',
+                        // 'listLayoutParent':'.wrapContent.cardHorizontal',
+                        // 'listHighlightEl':'.productCard__image'
+                    },
+                    'highlightElement': '.productCard',
+                    'listWrapper': '#listingContainer',
+                    'dinamicPage': true
+                }
+           ]
+        },
+        'type':'number',
+        'competitor':'euronics',
+        'timeout': 0
+    },
+
+    // {'domain': 'www.euronics.it', 'selector': [{'sel':'#productId', 'attr': 'value', 'replace': 'eProd'}], 'type': 'number', 'competitor': 'euronics'},
+    
+    { 
+        'domain':'www.trony.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'input[name="ProductSKU"]',
+                 'attr':'value',
+                 'replace':''
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': '',
+                    'sel': 'input[name="SKU"]',
+                    'attr': 'value',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': '.smcc-listing-risultati-prodotto',
+                    'layoutSelectors':{},
+                    'highlightElement': '.smcc-listing-risultati-prodotto',
+                    'listWrapper': '',
+                    'dinamicPage': false
+                }
+           ]
+        },
+        'type':'number',
+        'competitor':'trony',
+        'timeout': 0
+    },
+    // {'domain': 'www.trony.it', 'selector': [{'sel': 'input[name="ProductSKU"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'trony'},
+
+    { 
+        'domain':'www.amazon.it',
+        'selector':{ 
+           'popupSelector':[ 
+              { 
+                 'sel':'#ASIN',
+                 'attr':'value',
+                 'replace':''
+              }
+           ],
+           'productPageSelector': [
+                {
+                    'target': '',
+                    'sel': 'div[data-asin]',
+                    'attr': 'data-asin',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': 'div[data-asin]',
+                    'layoutSelectors':{ 
+                        // 'gridLayoutParent':'.grid-products',
+                        // 'gridHighlightEl':'mat-card',
+                        // 'listLayoutParent':'.list-products',
+                        // 'listHighlightEl':'.card-image'
+                    },
+                    'highlightElement': 'div[data-asin]',
+                    'listWrapper': '',
+                    'dinamicPage': false
+                },
+                {
+                    'target': '',
+                    'sel': 'li[data-asin]',
+                    'attr': 'data-asin',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': 'li[data-asin]',
+                    'layoutSelectors':{ 
+                        // 'gridLayoutParent':'.grid-products',
+                        // 'gridHighlightEl':'mat-card',
+                        // 'listLayoutParent':'.list-products',
+                        // 'listHighlightEl':'.card-image'
+                    },
+                    'highlightElement': 'li[data-asin]',
+                    'listWrapper': '',
+                    'dinamicPage': false
+                }
+           ]
+        },
+        'type':'number',
+        'competitor':'amazon',
+        'timeout': 0
+    },
+
     {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
-    {'domain': 'www.mediaworld.it', 'selector': [{'sel': 'h1', 'attr': 'data-prod-detail-id', 'replace': ''}], 'type': 'number', 'competitor': 'mediaworld'},
-    {'domain': 'www.unieuro.it', 'selector': [{'sel':'div[data-productdetail-sku]', 'attr': 'data-productdetail-sku', 'replace': ''}], 'type': 'number', 'competitor': 'unieuro'},
-    {'domain': 'www.euronics.it', 'selector': [{'sel':'#productId', 'attr': 'value', 'replace': 'eProd'}], 'type': 'number', 'competitor': 'euronics'},
-    {'domain': 'www.trony.it', 'selector': [{'sel': 'input[name="ProductSKU"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'trony'},
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
@@ -165,7 +359,7 @@ let competitor = '';
 let type = '';
 
 for(var i of obj){
-    console.log(i);
+    // console.log(i);
     // console.log(window.location.host);
     // console.log(i['domain']);
 
@@ -176,8 +370,8 @@ for(var i of obj){
         
         // 2) If id is called by popup message:
         chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-            console.log('Meesage received');
-            console.log(message);
+            console.log('Popup logic. Meesage received');
+            // console.log(message);
             if (message['getId']){//Message from popup
                     // console.log('Selectors loop');
                     var selector = '';
@@ -264,120 +458,137 @@ for(var i of obj){
         var highlightElement = '';
         var splitKey = 0;   
         var target = '';     
-
+        var listWrapper = '';
+        var dinamicPage = false;
 
         setTimeout(function(){
 
-            // $(window).on('hashchange', function(e){
-            //     console.log('Url changed');
-            //     console.log(window.location);
-            //    });
 
-            for (var t of i['selector']['productPageSelector']){
-                if ($(t['sel']).length > 0){
-                    productsListSelector = t['sel'];
-                    attrStr = t['attr'];
-                    replaceStr = t['replace'];
-                    parentBoxSelector = t['parentBoxSelector']
-                    splitKey = t['splitKey'];
-                    target = t['target']
-    
-                    // console.log('Layout selectors');
-                    // console.log(t['layoutSelectors']);
-    
-    
-                    if(t['highlightElement'] == ''){
-                        if ($(t['layoutSelectors']['gridLayoutParent']).length){
-                            highlightElement = t['layoutSelectors']['gridHighlightEl'];
-                            console.log('Grid');
-                        }else if ($(t['layoutSelectors']['listLayoutParent']).length){
-                            highlightElement = t['layoutSelectors']['listHighlightEl'];
-                            console.log('List');
-                        }
-                    }else{
-                        highlightElement = t['highlightElement']
-                    }
-    
-                    console.log('productsListSelector: ' + productsListSelector);
-                    console.log('attrStr: ' + attrStr);
-                    console.log('replaceStr: ' + replaceStr);
-                    console.log('parentBoxSelector: ' + parentBoxSelector);
-                    console.log('highlightElement: ' + highlightElement);
-                    console.log('splitKey: ' + splitKey);
-                    
-                    break;
-                }
-            }
-    
-    
-    
-            //2. Check productsListSelector array to see if location is on a product list page
-            // If selector exists on page => location on product lists pages
-    
-            if ($(productsListSelector).length ){
-                // console.log('Exists');
+            var competitorName = window.location.host.replace('www.', '').split('.')[0];
+            var idsArr = []
+            var typeStr = i['type'];
+
+
+            var highlight = function(){
                 
-                var typeStr = i['type'];
-                var competitorName = window.location.host.replace('www.', '').split('.')[0];
-                var idsArr = []
-                var idsStr = '['
-    
-                if (target != 'productImage'){
-                    $(productsListSelector).each(function(){
-                        $(this).addClass('item-checked');
-                        if(attrStr != 'text'){
-                            if($(this).attr(attrStr) != null){
-                                console.log($(this).attr(attrStr));
+                for (var t of i['selector']['productPageSelector']){
+                    console.log(t['sel']);
+                    if ($(t['sel']).length > 0){
+                        productsListSelector = t['sel'] + ':not(.item-checked)';
+                        attrStr = t['attr'];
+                        replaceStr = t['replace'];
+                        parentBoxSelector = t['parentBoxSelector']
+                        splitKey = t['splitKey'];
+                        target = t['target']
+                        listWrapper = t['listWrapper'];
+                        dinamicPage = t['dinamicPage']
+                        // console.log('Layout selectors');
+                        // console.log(t['layoutSelectors']);
+        
+        
+                        if(t['highlightElement'] == ''){
+                            if ($(t['layoutSelectors']['gridLayoutParent']).length){
+                                highlightElement = t['layoutSelectors']['gridHighlightEl'];
+                                // console.log('Grid');
+                            }else if ($(t['layoutSelectors']['listLayoutParent']).length){
+                                highlightElement = t['layoutSelectors']['listHighlightEl'];
+                                // console.log('List');
+                            }
+                        }else{
+                            highlightElement = t['highlightElement']
+                        }
+        
+                        console.log('productsListSelector: ' + productsListSelector);
+                        console.log('attrStr: ' + attrStr);
+                        console.log('replaceStr: ' + replaceStr);
+                        console.log('parentBoxSelector: ' + parentBoxSelector);
+                        console.log('highlightElement: ' + highlightElement);
+                        console.log('splitKey: ' + splitKey);
+                        console.log('listWrapper' + listWrapper);
+                        console.log('dinamicPage: ' + dinamicPage);
+                        
+                        break;
+                    }
+                }
+        
+        
+        
+                // 2. Check productsListSelector array to see if location is on a product list page
+                // If selector exists on page => location on product lists pages
+                
+                var idsStr = '';
+                console.log($(productsListSelector).length );
+                if ($(productsListSelector).length ){
+                    console.log($(productsListSelector).length );
+                         
+                    if (target != 'productImage'){
+                        $(productsListSelector).each(function(){
+                            if(attrStr != 'text'){
+                                if($(this).attr(attrStr) != null){
+                                    // console.log($(this).attr(attrStr));
+                                    // idsArr.push($(this).attr(attrStr)//.replace(replaceStr, ''));
+                                    idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
+                                }
+                                
+                            }else if(attrStr == 'text'){
                                 // idsArr.push($(this).attr(attrStr)//.replace(replaceStr, ''));
-                                idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
+                                idsStr += $(this).text().replace(replaceStr, '') + ',';
                             }
                             
-                        }else if(attrStr == 'text'){
-                            // idsArr.push($(this).attr(attrStr)//.replace(replaceStr, ''));
-                            idsStr += $(this).text().replace(replaceStr, '') + ',';
-                        }
+                        });
+                    }else{
+                        $(productsListSelector).each(function(){
+                            var imgSrc = $(this).attr(attrStr).replace(replaceStr, '');
+                            var getIdArr = imgSrc.split('/');
+                            var id = getIdArr[getIdArr.length + splitKey]
+                            idsStr +=  id + ',';
+                           
+                        })
                         
-                    });
-                }else{
-                    $(productsListSelector).each(function(){
-                        $(this).addClass('item-checked');
-                        var imgSrc = $(this).attr(attrStr).replace(replaceStr, '');
-                        var getIdArr = imgSrc.split('/');
-                        var id = getIdArr[getIdArr.length + splitKey]
-                        idsStr += '"' + id + '",';
-                       
-                    })
-                    idsStr += ']';
+                    }
+                    console.log('Ids string');
+                    console.log(idsStr);
+                    // console.log(typeStr);
+                    // console.log(competitorName);
+                    // console.log(idsArr);
+        
+        
+                    // ############################################## Messaging to background
+        
+                    chrome.runtime.sendMessage(
+                        {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr},
+                    )
+        
+                    // #################################################
+
                 }
-                
+                console.log('Highlighted');
                 console.log(idsStr);
-                console.log(typeStr);
-                console.log(competitorName);
-                console.log(idsArr);
-    
-    
-                // ############################################## Messaging to background
-    
-    
-                chrome.runtime.sendMessage(
-                    {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr},
-                )
-    
-    
-                chrome.runtime.onMessage.addListener(
-                    function(message, sender, sendResponse) {
-                        console.log('Data from background:');
-    
-                        if (message.dataType == 'productList'){
-                            console.log(message.data.data);
-    
+            }
+
+            highlight();
+
+
+            // 3. Get back the message from highlight
+            chrome.runtime.onMessage.addListener(
+                function(message, sender, sendResponse) {
+                    console.log('Data from background:');
+
+                    if (message.dataType == 'productList'){
+                        console.log(message.data.data);
+
+                        if(message.data.data.length){
                             $(productsListSelector).each(function(){
+                                
+
+
+                                    
                                 for (var r of message.data.data){
                                     // console.log(r);
                                     // console.log($(this).attr(attrStr));
-    
+
                                     
-    
+
                                     if (typeStr == 'id'){
                                         idNumber = 'Number'
                                     }else if(typeStr == 'number'){
@@ -385,10 +596,11 @@ for(var i of obj){
                                     }
 
                                     if (attrStr != 'text'){
+                                       
                                         if ($(this).attr(attrStr).indexOf(r[idNumber]) > -1){
                                             var deviationStr = r['Deviation'];
                                             var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-    
+
                                             statusClass = '';
                                             if (deviation < ranges.min){
                                                 statusClass = 'success-info';
@@ -397,11 +609,13 @@ for(var i of obj){
                                             }else{
                                                 statusClass = 'primary-info';
                                             }
-            
+                                            
                                             if (parentBoxSelector != highlightElement){
-                                                $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                            }else{
+                                                $(this).closest(parentBoxSelector).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                            }else if (parentBoxSelector == highlightElement) {
                                                 $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                            }else{
+                                                $(this).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                             }
                                             
                                         }
@@ -409,7 +623,7 @@ for(var i of obj){
                                         if ($(this).text() == r['competitorNumber']){
                                             var deviationStr = r['Deviation'];
                                             var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-    
+
                                             statusClass = '';
                                             if (deviation < ranges.min){
                                                 statusClass = 'success-info';
@@ -431,29 +645,46 @@ for(var i of obj){
                                     }
                                     
                                 }
+                                
+                                $(this).addClass('item-checked');
                             });
-                        }else if(message.dataType == 'loginCheck'){
-                            console.log('Not logged in');
-                            $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
+                            
+                        }else{
+                            console.log('No data from background');
                         }
-    
-                        
+                    }else if(message.dataType == 'loginCheck'){
+                        console.log('Not logged in');
+                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
                     }
-                );
-    
-                // #################################################
-    
-    
-    
-    
+
+                    
+                }
+            );
+
+
+
+
+
+            // 4. Listen page change
+            if (dinamicPage){
+                setInterval(function(){
+
+                    // $("body").on('DOMSubtreeModified', listWrapper, function() {
+                        console.log('Check for changes');
+                        console.log($(productsListSelector).length);
+                        if($(productsListSelector).length){
+                            highlight();
+                        };
+                        // highlight();
+                    // });
+                }, 3000);
             }
+            
             
 
         
            
-            // $("body").on('DOMSubtreeModified', "#product-list .category-content", function() {
-            //     alert('changed');
-            // });
+            
 
 
         }, timeout
