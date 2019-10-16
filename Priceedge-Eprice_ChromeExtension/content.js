@@ -1,6 +1,4 @@
-console.log('Content.js loaded');
-
-// -------------- Chrome extension settings
+// ####################### Chrome extension settings ######################
 
 let ranges = {
     min: -2,
@@ -85,8 +83,7 @@ let obj = [
         'type':'number',
         'competitor':'monclick',
         'timeout': 0
-    },
-    // {'domain': 'monclick.it', 'selector': [ {'sel': '#test', 'attr': 'content', 'replace': ''}, {'sel': '.mk-product-item-details a[data-action = "add-to-cart"][data-product-code]', 'attr': 'data-product-code', 'replace': ''}, {'sel': 'span[itemprop="identifier"]', 'attr': 'text', 'replace': '' }],  'type': 'number', 'competitor': 'monclick'},   
+    }, 
     { 
         'domain':'www.yeppon.it',
         'selector':{ 
@@ -121,7 +118,6 @@ let obj = [
         'competitor':'yeppon',
         'timeout': 5000
     },
-    // {'domain': 'www.yeppon.it', 'selector': [{'sel':'span[itemprop="productID"]', 'attr': 'text', 'replace': ''}], 'type': 'number', 'competitor': 'yeppon'},
     { 
         'domain':'www.onlinestore.it',
         'selector':{ 
@@ -151,7 +147,6 @@ let obj = [
         'competitor':'onlinestore',
         'timeout': 0
     },
-    // {'domain': 'www.onlinestore.it', 'selector': [{'sel': 'input[name="sAdd"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'onlinestore'},
     { 
         'domain':'www.mediaworld.it',
         'selector':{ 
@@ -186,8 +181,6 @@ let obj = [
         'competitor':'mediaworld',
         'timeout': 0
     },
-    // {'domain': 'www.mediaworld.it', 'selector': [{'sel': 'h1', 'attr': 'data-prod-detail-id', 'replace': ''}], 'type': 'number', 'competitor': 'mediaworld'},
-    
     { 
         'domain':'www.unieuro.it',
         'selector':{ 
@@ -206,12 +199,7 @@ let obj = [
                     'replace': '',
                     'splitKey': 0,
                     'parentBoxSelector': 'section',
-                    'layoutSelectors':{ 
-                        // 'gridLayoutParent':'.grid-products',
-                        // 'gridHighlightEl':'mat-card',
-                        // 'listLayoutParent':'.list-products',
-                        // 'listHighlightEl':'.card-image'
-                    },
+                    'layoutSelectors':{},
                     'highlightElement': 'article',
                     'listWrapper': '#listing-result',
                     'dinamicPage': true
@@ -222,9 +210,6 @@ let obj = [
         'competitor':'unieuro',
         'timeout': 5000
     },
-    
-    // {'domain': 'www.unieuro.it', 'selector': [{'sel':'div[data-productdetail-sku]', 'attr': 'data-productdetail-sku', 'replace': ''}], 'type': 'number', 'competitor': 'unieuro'},
-
     { 
         'domain':'www.euronics.it',
         'selector':{ 
@@ -243,12 +228,7 @@ let obj = [
                     'replace': 'product:eProd',
                     'splitKey': 0,
                     'parentBoxSelector': '.productCard',
-                    'layoutSelectors':{ 
-                        // 'gridLayoutParent':'.wrapContent:not(.cardHorizontal) ',
-                        // 'gridHighlightEl':'.productCard',
-                        // 'listLayoutParent':'.wrapContent.cardHorizontal',
-                        // 'listHighlightEl':'.productCard__image'
-                    },
+                    'layoutSelectors':{},
                     'highlightElement': '.productCard',
                     'listWrapper': '#listingContainer',
                     'dinamicPage': true
@@ -259,9 +239,6 @@ let obj = [
         'competitor':'euronics',
         'timeout': 0
     },
-
-    // {'domain': 'www.euronics.it', 'selector': [{'sel':'#productId', 'attr': 'value', 'replace': 'eProd'}], 'type': 'number', 'competitor': 'euronics'},
-    
     { 
         'domain':'www.trony.it',
         'selector':{ 
@@ -291,8 +268,6 @@ let obj = [
         'competitor':'trony',
         'timeout': 0
     },
-    // {'domain': 'www.trony.it', 'selector': [{'sel': 'input[name="ProductSKU"]', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'trony'},
-
     { 
         'domain':'www.amazon.it',
         'selector':{ 
@@ -306,17 +281,12 @@ let obj = [
            'productPageSelector': [
                 {
                     'target': '',
-                    'sel': 'div[data-asin]',
+                    'sel': 'div[data-asin].sg-col-4-of-24',
                     'attr': 'data-asin',
                     'replace': '',
                     'splitKey': 0,
                     'parentBoxSelector': 'div[data-asin]',
-                    'layoutSelectors':{ 
-                        // 'gridLayoutParent':'.grid-products',
-                        // 'gridHighlightEl':'mat-card',
-                        // 'listLayoutParent':'.list-products',
-                        // 'listHighlightEl':'.card-image'
-                    },
+                    'layoutSelectors':{},
                     'highlightElement': 'div[data-asin]',
                     'listWrapper': '',
                     'dinamicPage': false
@@ -328,57 +298,69 @@ let obj = [
                     'replace': '',
                     'splitKey': 0,
                     'parentBoxSelector': 'li[data-asin]',
-                    'layoutSelectors':{ 
-                        // 'gridLayoutParent':'.grid-products',
-                        // 'gridHighlightEl':'mat-card',
-                        // 'listLayoutParent':'.list-products',
-                        // 'listHighlightEl':'.card-image'
-                    },
+                    'layoutSelectors':{},
                     'highlightElement': 'li[data-asin]',
                     'listWrapper': '',
                     'dinamicPage': false
-                }
+                },
+                {
+                    'target': '',
+                    'sel': 'div[data-asin].sg-col-20-of-24',
+                    'attr': 'data-asin',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': 'div[data-asin].sg-col-20-of-24',
+                    'layoutSelectors':{},
+                    'highlightElement': '.a-section .sg-row > div:nth-child(1) .sg-col-inner span[data-component-type="s-product-image"] a .a-section ',
+                    'listWrapper': '',
+                    'dinamicPage': false
+                },
            ]
         },
         'type':'number',
-        'competitor':'amazon',
+        'competitor':'amazon,amazon_proper',
         'timeout': 0
     },
 
-    {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
+    // {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
 let login = 'https://staging.priceedge.eu/eprice';
 
-// -------------- end Chrome extension settings
 
 
-// a) Get needed informations from obj
+// ##################### end Chrome extension settings
+
+
+
+
+
+
+
+// -------------------- 1. Get needed informations from obj ---------------------
+
 let competitor = '';
 let type = '';
 
 for(var i of obj){
-    // console.log(i);
-    // console.log(window.location.host);
-    // console.log(i['domain']);
 
     if (i['domain'] == window.location.host){
 
 
-        // ----------- Popup
+        // ##################### Popup logic ####################
         
-        // 2) If id is called by popup message:
+        // A. If id is called by popup message:
         chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             console.log('Popup logic. Meesage received');
-            // console.log(message);
+
             if (message['getId']){//Message from popup
-                    // console.log('Selectors loop');
-                    var selector = '';
+
+                var selector = '';
                     var replace = '';
 
                     for (var z of i['selector']['popupSelector']){
-                        // console.log(z);
+
                         if ($(z['sel']).length > 0){
 
                             selector = z['sel'];
@@ -399,15 +381,14 @@ for(var i of obj){
                         productId = productId.replace(replace, '');
                     }
 
-                    // console.log($(selector).attr(attr));
-                    // console.log(productId);
-                    type = i['type'];
-                    competitor = i['competitor']
 
-                    //  b.1) if product id or number is found, it will be sended to popup with type and competitor infos
+                    type = i['type'];
+                    competitor = i['competitor'].split(',')[0]
+
+                    //  A.1 if product id or number is found, it will be sended to popup with type and competitor infos
                     if (typeof productId !== 'undefined'){
                         
-                            // B - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
+                            // A.1.1 - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
                             //    - content finds the id and send it back to popup
                             
 
@@ -421,7 +402,7 @@ for(var i of obj){
                                     console.log('Id send back: ' + productId);   
                                 });
                             
-                    //  b.2) If product Id is not found, send back not found message  
+                    //  A.2 If product Id is not found, send back not found message  
                     }else{
                         console.log('Id not found on the page');
                         chrome.runtime.sendMessage({
@@ -436,15 +417,15 @@ for(var i of obj){
             }
         })
             
-        // --------------------- end Popup logic
+        // ############# end Popup logic
 
 
 
-        // --------------------- Start Products-list pages logic 
+        // ##################### Products-list pages logic ######
 
         
         
-        // 1. Set selectors from obj: 
+        // A. Set selectors from obj: 
         // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
         // - selector of highlight element - highlightElement (different for grid or list layout)
 
@@ -461,18 +442,26 @@ for(var i of obj){
         var listWrapper = '';
         var dinamicPage = false;
 
+
+        // A.1 If needed, set timeout (for the pages that loads scripts like yeppon, onlinestore)
         setTimeout(function(){
 
-
-            var competitorName = window.location.host.replace('www.', '').split('.')[0];
-            var idsArr = []
+            // var competitorName = window.location.host.replace('www.', '').split('.')[0];
+            var competitorName = i['competitor']
             var typeStr = i['type'];
+
+            // A.2 Function that will:
+                            // a - get all selectors
+                            // b - check if id selector is on the page
+                            // c - get all ids into idsStr
+                            // d - send message to background with ids list
+
+
 
 
             var highlight = function(){
-                
+                // A.2.a
                 for (var t of i['selector']['productPageSelector']){
-                    console.log(t['sel']);
                     if ($(t['sel']).length > 0){
                         productsListSelector = t['sel'] + ':not(.item-checked)';
                         attrStr = t['attr'];
@@ -481,60 +470,49 @@ for(var i of obj){
                         splitKey = t['splitKey'];
                         target = t['target']
                         listWrapper = t['listWrapper'];
-                        dinamicPage = t['dinamicPage']
-                        // console.log('Layout selectors');
-                        // console.log(t['layoutSelectors']);
-        
+                        dinamicPage = t['dinamicPage']       
         
                         if(t['highlightElement'] == ''){
                             if ($(t['layoutSelectors']['gridLayoutParent']).length){
                                 highlightElement = t['layoutSelectors']['gridHighlightEl'];
-                                // console.log('Grid');
                             }else if ($(t['layoutSelectors']['listLayoutParent']).length){
                                 highlightElement = t['layoutSelectors']['listHighlightEl'];
-                                // console.log('List');
                             }
                         }else{
                             highlightElement = t['highlightElement']
                         }
         
-                        console.log('productsListSelector: ' + productsListSelector);
-                        console.log('attrStr: ' + attrStr);
-                        console.log('replaceStr: ' + replaceStr);
-                        console.log('parentBoxSelector: ' + parentBoxSelector);
-                        console.log('highlightElement: ' + highlightElement);
-                        console.log('splitKey: ' + splitKey);
-                        console.log('listWrapper' + listWrapper);
-                        console.log('dinamicPage: ' + dinamicPage);
+                        // console.log('productsListSelector: ' + productsListSelector);
+                        // console.log('attrStr: ' + attrStr);
+                        // console.log('replaceStr: ' + replaceStr);
+                        // console.log('parentBoxSelector: ' + parentBoxSelector);
+                        // console.log('highlightElement: ' + highlightElement);
+                        // console.log('splitKey: ' + splitKey);
+                        // console.log('listWrapper' + listWrapper);
+                        // console.log('dinamicPage: ' + dinamicPage);
                         
                         break;
                     }
                 }
         
-        
-        
-                // 2. Check productsListSelector array to see if location is on a product list page
+                // A.2.b.
+                // Check productsListSelector array to see if location is on a product list page
                 // If selector exists on page => location on product lists pages
                 
                 var idsStr = '';
-                console.log($(productsListSelector).length );
+
                 if ($(productsListSelector).length ){
-                    console.log($(productsListSelector).length );
-                         
+
+                    // A.2.c.    
                     if (target != 'productImage'){
                         $(productsListSelector).each(function(){
                             if(attrStr != 'text'){
                                 if($(this).attr(attrStr) != null){
-                                    // console.log($(this).attr(attrStr));
-                                    // idsArr.push($(this).attr(attrStr)//.replace(replaceStr, ''));
                                     idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
                                 }
-                                
                             }else if(attrStr == 'text'){
-                                // idsArr.push($(this).attr(attrStr)//.replace(replaceStr, ''));
                                 idsStr += $(this).text().replace(replaceStr, '') + ',';
                             }
-                            
                         });
                     }else{
                         $(productsListSelector).each(function(){
@@ -542,52 +520,42 @@ for(var i of obj){
                             var getIdArr = imgSrc.split('/');
                             var id = getIdArr[getIdArr.length + splitKey]
                             idsStr +=  id + ',';
-                           
                         })
-                        
                     }
-                    console.log('Ids string');
+                   
+                    // A.2.d 
+                    // ############ Messaging to background
+                    console.log('Ids send to background:');
                     console.log(idsStr);
-                    // console.log(typeStr);
-                    // console.log(competitorName);
-                    // console.log(idsArr);
-        
-        
-                    // ############################################## Messaging to background
-        
+                    console.log(competitorName);
+
                     chrome.runtime.sendMessage(
                         {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr},
                     )
-        
-                    // #################################################
-
                 }
-                console.log('Highlighted');
-                console.log(idsStr);
             }
 
             highlight();
 
 
-            // 3. Get back the message from highlight
+            // B. - Get back the message from highlight
+            //   - if data
+            //          - Hightlight elements that have data
+            //   - else
+            //          - add popup for login
+
+
+
             chrome.runtime.onMessage.addListener(
                 function(message, sender, sendResponse) {
-                    console.log('Data from background:');
-
+                    console.log('Message from background: ');
+                    console.log(message.data.data);
                     if (message.dataType == 'productList'){
-                        console.log(message.data.data);
-
                         if(message.data.data.length){
+                            
                             $(productsListSelector).each(function(){
                                 
-
-
-                                    
                                 for (var r of message.data.data){
-                                    // console.log(r);
-                                    // console.log($(this).attr(attrStr));
-
-                                    
 
                                     if (typeStr == 'id'){
                                         idNumber = 'Number'
@@ -611,13 +579,17 @@ for(var i of obj){
                                             }
                                             
                                             if (parentBoxSelector != highlightElement){
-                                                $(this).closest(parentBoxSelector).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                                if (parentBoxSelector == productsListSelector){
+
+                                                    $(this).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                                }else{
+
+                                                    $(this).closest(parentBoxSelector).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
+                                                }
                                             }else if (parentBoxSelector == highlightElement) {
+
                                                 $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                            }else{
-                                                $(this).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                             }
-                                            
                                         }
                                     }else if(attrStr == 'text'){
                                         if ($(this).text() == r['competitorNumber']){
@@ -632,18 +604,14 @@ for(var i of obj){
                                             }else{
                                                 statusClass = 'primary-info';
                                             }
-                                            // console.log('List code here');
-                                            // console.log(parentBoxSelector);
-                                            // console.log(highlightElement);
+
                                             if (parentBoxSelector != highlightElement){
                                                 $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                             }else{
                                                 $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                             }
-                                            
                                         }
                                     }
-                                    
                                 }
                                 
                                 $(this).addClass('item-checked');
@@ -656,37 +624,20 @@ for(var i of obj){
                         console.log('Not logged in');
                         $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
                     }
-
-                    
                 }
             );
 
 
-
-
-
-            // 4. Listen page change
+            // C. Listen page change for the pages that have dinamicPage = true
             if (dinamicPage){
                 setInterval(function(){
-
-                    // $("body").on('DOMSubtreeModified', listWrapper, function() {
-                        console.log('Check for changes');
-                        console.log($(productsListSelector).length);
-                        if($(productsListSelector).length){
-                            highlight();
-                        };
-                        // highlight();
-                    // });
+                    console.log('Changed items number: ' + $(productsListSelector).length);
+                    if($(productsListSelector).length){
+                        highlight();
+                    };
                 }, 3000);
             }
             
-            
-
-        
-           
-            
-
-
         }, timeout
         );
 
@@ -694,8 +645,6 @@ for(var i of obj){
         
     // --------------------- End Product-list pages
         
-
-
         break;
     }
 }
