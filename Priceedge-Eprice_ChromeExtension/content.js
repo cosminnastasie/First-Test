@@ -284,6 +284,18 @@ let obj = [
               }
            ],
            'productPageSelector': [
+               {
+                    'target': '',
+                    'sel': 'div[data-asin].sg-col-20-of-24',
+                    'attr': 'data-asin',
+                    'replace': '',
+                    'splitKey': 0,
+                    'parentBoxSelector': 'div[data-asin].sg-col-20-of-24',
+                    'layoutSelectors':{},
+                    'highlightElement': '.a-section .sg-row > div:nth-child(1) .sg-col-inner span[data-component-type="s-product-image"] a .a-section ',
+                    'listWrapper': '',
+                    'dinamicPage': false
+                },
                 {
                     'target': '',
                     'sel': 'div[data-asin].sg-col-4-of-24',
@@ -319,7 +331,7 @@ let obj = [
                     'highlightElement': '.a-section .sg-row > div:nth-child(1) .sg-col-inner span[data-component-type="s-product-image"] a .a-section ',
                     'listWrapper': '',
                     'dinamicPage': false
-                },
+                }    
            ]
         },
         'type':'number',
@@ -331,8 +343,8 @@ let obj = [
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
-let login = 'https://staging.priceedge.eu/eprice';
-
+let login = 'https://eprice.priceedge.eu';
+let getDeviationUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorDeviation';
 
 
 // ##################### end Chrome extension settings
@@ -537,7 +549,7 @@ for(var i of obj){
                     console.log(competitorName);
 
                     chrome.runtime.sendMessage(
-                        {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr},
+                        {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr, competitorDeviationUrl : getDeviationUrl},
                     )
                 }
             }

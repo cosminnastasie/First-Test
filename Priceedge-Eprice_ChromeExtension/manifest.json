@@ -19,7 +19,6 @@
                 "https://www.unieuro.it/*",
                 "https://www.euronics.it/*",
                 "https://www.trony.it/*",
-                "http://localhost/*",
                 "https://eprice.priceedge.eu/*"
             ],
             "js": [ "js/jquery.js", "content.js"],
@@ -33,12 +32,13 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "declarativeContent", // you can add whatever you want/need,
+        "declarativeContent",
         "https://eprice.priceedge.eu/",
         "https://www.eprice.it/*",
         "https://eprice.priceedge.eu/*",
         "https://www.yeppon.it/*",
-         "<all_urls>", "contextMenus"
+        "<all_urls>", 
+        "contextMenus"
     ],
     "background": {
         "scripts": ["js/jquery.js", "background.js"]

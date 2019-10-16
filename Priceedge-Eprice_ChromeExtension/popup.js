@@ -108,7 +108,9 @@ $.ajax({
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log('Message received');
     console.log(message);
-    productId = message['data'].productId;
+    if (message['data']){
+        productId = message['data'].productId;
+    }
     var type = message['data'].type;
     var competitor = message['data'].competitor;
 
