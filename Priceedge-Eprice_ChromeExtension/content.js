@@ -14,7 +14,12 @@ let obj = [
                  'sel':'meta[itemprop="mpn"]',
                  'attr':'content',
                  'replace':''
-              }
+              },
+              { 
+                'sel':'.contInfo>strong:not(#ftenhance)',
+                'attr':'text',
+                'replace':''
+             }
            ],
            'productPageSelector': [
                 {
@@ -358,16 +363,19 @@ for(var i of obj){
 
                 var selector = '';
                     var replace = '';
-
                     for (var z of i['selector']['popupSelector']){
-
+                        
                         if ($(z['sel']).length > 0){
-
                             selector = z['sel'];
                             var attr = z['attr'];
                             replace = z['replace']
-
-                            break;
+                            if ($(selector).attr(attr) != null){
+                                if ($(selector).attr(attr).replace(replace, '') != ''){
+                                    break;
+                                }
+                            }
+                            
+                            
                         }
                     }
 
@@ -548,7 +556,7 @@ for(var i of obj){
             chrome.runtime.onMessage.addListener(
                 function(message, sender, sendResponse) {
                     console.log('Message from background: ');
-                    console.log(message.data.data);
+                    console.log(message.data);
                     if (message.dataType == 'productList'){
                         if(message.data.data.length){
                             
