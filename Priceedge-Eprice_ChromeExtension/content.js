@@ -641,7 +641,7 @@ for(var i of obj){
                         }
                     }else if(message.dataType == 'loginCheck'){
                         console.log('Not logged in');
-                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
+                        $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box" onClick="this.parentNode.parentNode.removeChild(this.parentNode)">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
                     }
                 }
             );
