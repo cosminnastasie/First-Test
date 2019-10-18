@@ -5,6 +5,7 @@ console.log('Popup js loaded');
 let domains = [
     'https://www.eprice.it/',
     'https://monclick.it/',
+	'https://www.monclick.it/',
     'https://www.yeppon.it/',
     'https://www.amazon.it',
     'https://www.onlinestore.it/',
@@ -118,7 +119,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if(message['data'].productId != undefined){
         productId = encodeURIComponent(productId)
         console.log(productId);
-        // src = 'http://localhost/Blueberry/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         
         $('body').append('<iframe src=' + src + ' id="privateIframe"></iframe>');
@@ -145,7 +145,6 @@ $(document).ready(function(){
 
         // Create Graphic popup
         chrome.windows.create(
-            // {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "normal", width: 1100, height: 606, left: 20, top: 400}
             {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "popup", width: 1100, height: 606, left: 20, top: 400}
         );        
     });

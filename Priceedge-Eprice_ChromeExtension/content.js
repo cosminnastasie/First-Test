@@ -184,7 +184,7 @@ let obj = [
         },
         'type':'number',
         'competitor':'mediaworld',
-        'timeout': 0
+        'timeout': 3000
     },
     { 
         'domain':'www.unieuro.it',
@@ -362,8 +362,8 @@ let type = '';
 
 for(var i of obj){
 
-    if (i['domain'] == window.location.host){
-
+    // if (i['domain'] == window.location.host ){
+    if (i['domain'] == window.location.host || window.location.host.indexOf(i['domain']) > 0 ){
 
         // ##################### Popup logic ####################
         
