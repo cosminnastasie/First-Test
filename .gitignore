@@ -1,1 +1,4 @@
 .ignore
+/ReactLearn/node_modules
+ReactLearn/dist
+ReactLearn/package-lock.json
