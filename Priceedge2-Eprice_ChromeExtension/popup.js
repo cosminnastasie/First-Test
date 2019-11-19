@@ -12,6 +12,7 @@ let domains = [
     'https://www.unieuro.it/',
     'https://www.euronics.it/',
     'https://www.trony.it/online',
+    'https://www.expertonline.it/'
 ]
 
 let blackUrlsList = [
@@ -118,8 +119,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if(message['data'].productId != undefined){
         productId = encodeURIComponent(productId)
         console.log(productId);
-        src = 'http://localhost/Blueberry/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
-        // src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
+        // src = 'http://localhost/Blueberry/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
+        src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         
         $('body').append('<iframe src=' + src + ' id="privateIframe"></iframe>');
         $('#showGraph').removeClass('hide');

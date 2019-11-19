@@ -1,5 +1,5 @@
 // ####################### Chrome extension settings ######################
-
+console.log('Content loaded');
 let ranges = {
     min: -2,
     max: 2
@@ -344,9 +344,9 @@ let obj = [
         'selector':{ 
             'popupSelector':[ 
                 { 
-                    'sel':'ctl00_ctl00_PhCentrale_PhCentraleInternal_ctl01_Div1',
+                    'sel':'#ctl00_ctl00_PhCentrale_PhCentraleInternal_ctl01_Div1',
                     'attr':'text',
-                    'replace':'alabala'
+                    'replace':'Codice articolo:'
                 },
                 { 
                     'sel':'span[itemprop="identifier"]',
@@ -427,16 +427,20 @@ for(var i of obj){
                     }
 
                     if(attr == 'text'){
-                        productId = $(selector).text();
+                        productId = $(selector).text()
                     }else{
                         productId = $(selector).attr(attr);
                     }
-
+                    
                     if (replace != ''){
-                        productId = productId.replace(replace, '');
+                        productId = productId.replace(replace, '').trim();
+                        console.log(productId);
+                        console.log('Replace ' + replace);
+
+                    }else{
+                        console.log('Replace e empty');
                     }
                     
-                    console.log(productId);
 
                     type = i['type'];
                     competitor = i['competitor'].split(',')[0]

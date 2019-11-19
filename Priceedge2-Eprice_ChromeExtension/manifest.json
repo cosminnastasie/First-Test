@@ -19,7 +19,8 @@
                 "https://www.unieuro.it/*",
                 "https://www.euronics.it/*",
                 "https://www.trony.it/*",
-                "https://eprice.priceedge.eu/*"
+                "https://eprice.priceedge.eu/*",
+                "https://www.expertonline.it/*"
             ],
             "js": [ "js/jquery.js", "content.js"],
             "css": ["css/content.css"]
@@ -37,6 +38,7 @@
         "https://www.eprice.it/*",
         "https://eprice.priceedge.eu/*",
         "https://www.yeppon.it/*",
+         "https://www.expertonline.it/*",
         "<all_urls>", 
         "contextMenus"
     ],
