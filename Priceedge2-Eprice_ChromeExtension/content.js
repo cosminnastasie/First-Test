@@ -339,6 +339,41 @@ let obj = [
         'timeout': 0
     },
 
+    { 
+        'domain':'expertonline.it',
+        'selector':{ 
+            'popupSelector':[ 
+                { 
+                    'sel':'ctl00_ctl00_PhCentrale_PhCentraleInternal_ctl01_Div1',
+                    'attr':'text',
+                    'replace':'alabala'
+                },
+                { 
+                    'sel':'span[itemprop="identifier"]',
+                    'attr':'text',
+                    'replace':''
+                }
+            ],
+            'productPageSelector':[ 
+                { 
+                    'target':'',
+                    'sel':'.mainListingContainer .mk-listingProduct .mk-productListingImage a[data-product-code]',
+                    'attr':'data-product-code',
+                    'replace':'',
+                    'splitKey':0,
+                    'parentBoxSelector':'div',
+                    'layoutSelectors':{},
+                    'highlightElement':'div',
+                    'listWrapper':'',
+                    'dinamicPage': false
+                }
+            ]
+        },
+        'type':'number',
+        'competitor':'expertOnline',
+        'timeout': 0
+    }, 
+
     // {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
 ]
 
@@ -400,6 +435,8 @@ for(var i of obj){
                     if (replace != ''){
                         productId = productId.replace(replace, '');
                     }
+                    
+                    console.log(productId);
 
                     type = i['type'];
                     competitor = i['competitor'].split(',')[0]
