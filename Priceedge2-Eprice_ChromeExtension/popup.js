@@ -137,7 +137,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 // 4. Show graphic (Timeline view)
 $(document).ready(function(){
 
-
     $('#showGraph').on('click', function(){
         console.log('Show graph');
         var query = { active: true, currentWindow: true };
@@ -146,7 +145,6 @@ $(document).ready(function(){
 
         // Create Graphic popup
         chrome.windows.create(
-            // {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "normal", width: 1100, height: 606, left: 20, top: 400}
             {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "popup", width: 1100, height: 606, left: 20, top: 400}
         );        
     });

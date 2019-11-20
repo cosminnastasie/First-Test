@@ -344,26 +344,21 @@ let obj = [
         'selector':{ 
             'popupSelector':[ 
                 { 
-                    'sel':'#ctl00_ctl00_PhCentrale_PhCentraleInternal_ctl01_Div1',
-                    'attr':'text',
-                    'replace':'Codice articolo:'
-                },
-                { 
-                    'sel':'span[itemprop="identifier"]',
-                    'attr':'text',
-                    'replace':''
+                    'sel':'div[id^=Expert_]',
+                    'attr':'id',
+                    'replace':'Expert_'
                 }
             ],
             'productPageSelector':[ 
                 { 
                     'target':'',
-                    'sel':'.mainListingContainer .mk-listingProduct .mk-productListingImage a[data-product-code]',
-                    'attr':'data-product-code',
-                    'replace':'',
+                    'sel':'div[id^=PROD_Expert_]',
+                    'attr':'id',
+                    'replace':'PROD_Expert_',
                     'splitKey':0,
-                    'parentBoxSelector':'div',
+                    'parentBoxSelector':'.skywalker_riga skywalker_riga_articolo',
                     'layoutSelectors':{},
-                    'highlightElement':'div',
+                    'highlightElement':'.skywalker_imgProdotto',
                     'listWrapper':'',
                     'dinamicPage': false
                 }
@@ -374,7 +369,6 @@ let obj = [
         'timeout': 0
     }, 
 
-    // {'domain': 'www.amazon.it', 'selector': [{'sel': '#ASIN', 'attr': 'value', 'replace': ''}], 'type': 'number', 'competitor': 'amazon'},
 ]
 
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
