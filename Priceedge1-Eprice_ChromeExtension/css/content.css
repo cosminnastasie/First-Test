@@ -90,7 +90,7 @@
     align-items: center;
 }
 
-.close-popup-info-box {  
+.close-info-box {  
     cursor: pointer;
     position: absolute;
     top: 20px;
@@ -130,95 +130,4 @@
 .center-text{
     max-width: 64%;
     text-align: center;
-}
-
-/* POPUP */
-
-#pricePopup {
-    border-radius: 3px;
-    box-shadow: 0 1px 24px 0 rgba(0,0,0,.08);
-    background-color: #fff;
-    border: 1px solid #cbd6e2;
-    background: #fff;
-    min-height: 600px;
-    position: fixed;
-    right: 40px;
-    top: 10px;
-    width: 550px;
-    z-index: 999999;
-}
-
-#pricePopup iframe{
-    width: 100%;
-    height: 600px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    position: relative;
-    z-index:3;
-}
-
-.private-actions-row {
-    cursor: move; 
-    cursor:-webkit-grab; 
-    cursor:-moz-grab; 
-    cursor:grab;
-    position: absolute;
-    top: 0;
-    /* cursor: pointer; */
-    display: flex;
-    justify-content: flex-end;
-    box-shadow: inset 0 7px 9px -7px rgba(0,0,0,0.4);
-    padding: 0 3px;
-    z-index: 9;
-    width: -webkit-fill-available;
-}
-
-.private-actions-row > span {
-    display: flex;
-    margin-right: 4px;
-}
-
-.private-actions-row .close-popup {
-    cursor: pointer;
-    font-size: 23px;
-    font-weight: 700;
-    color: #425b76;
-}
-
-.private-actions-row .close-popup:before{
-    content: '\d7'
-}
-
-.message-popup {
-    border-radius: 3px;
-    box-shadow: 0 1px 24px 0 rgba(0,0,0,.08);
-    background-color: #fff;
-    border: 1px solid #cbd6e2;
-    background: #fff;
-    min-height: 200px;
-    position: fixed;
-    right: 40px;
-    top: 10px;
-    width: 400px;
-    z-index: 999999;
-}
-
-.popup-content {
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.popup-heading {
-    color: #425b76;
-    margin-bottom: 36px;
-    font-size: 16px;
-    text-align: center;
-}
-
-.message-popup .popup-heading {
-    padding: 0 20px;
 }

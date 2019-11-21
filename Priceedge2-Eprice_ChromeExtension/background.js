@@ -1,6 +1,5 @@
 console.log('Background loaded');
 
-
 function IsJsonString(str) {
     try {
         JSON.parse(str);
@@ -10,11 +9,44 @@ function IsJsonString(str) {
     return true;
   }
 
+// If extension button is clicked send message to content to display the popup
+chrome.browserAction.onClicked.addListener(function(tab) {
+    console.log('Clicked');    
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+        if (tabs.length){
+            chrome.tabs.sendMessage(tabs[0].id,{'action': 'openPopup'});  
+        }else{
+            console.log('No tab identified');
+        }
+    });
+});
 
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     console.log('Message received');
+    // Check login
+    if (message.request == "checkLogin"){
+        loginUrl = message.loginUrl
+
+        $.ajax({
+            method: 'POST',
+            url: loginUrl
+        }).done(function(data){
+            var loginState = false;
+            if (IsJsonString(data)){
+                loginState = true
+            }
+            //Get tab info; check if it's on a tracked page
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                console.log(tabs);
+                chrome.tabs.sendMessage(tabs[0].id,{ 'loginState': loginState});  
+            });
+        })
+    }
+
+
 
     if (message.request == 'getData'){// Data request from product list page
         console.log(message);
