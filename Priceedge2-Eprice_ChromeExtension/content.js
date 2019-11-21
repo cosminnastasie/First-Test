@@ -356,9 +356,14 @@ let obj = [
                     'attr':'id',
                     'replace':'PROD_Expert_',
                     'splitKey':0,
-                    'parentBoxSelector':'.skywalker_riga skywalker_riga_articolo',
-                    'layoutSelectors':{},
-                    'highlightElement':'.skywalker_imgProdotto',
+                    'parentBoxSelector':'div[data-codiceextra]',
+                    'layoutSelectors':{
+                        'gridLayoutParent':'.skywalker_quadro',
+                        'gridHighlightEl':'.skywalker_imgProdotto',
+                        'listLayoutParent':'.skywalker_riga.skywalker_riga_articolo',
+                        'listHighlightEl':'.skywalker_imgProdotto'
+                    },
+                    'highlightElement':'',
                     'listWrapper':'',
                     'dinamicPage': false
                 }
@@ -379,11 +384,6 @@ let getDeviationUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData
 // ##################### end Chrome extension settings
 
 
-
-
-
-
-
 // -------------------- 1. Get needed informations from obj ---------------------
 
 let competitor = '';
@@ -391,7 +391,6 @@ let type = '';
 
 for(var i of obj){
 
-    // if (i['domain'] == window.location.host ){
     if (i['domain'] == window.location.host || window.location.host.indexOf(i['domain']) > 0 ){
 
         // ##################### Popup logic ####################
@@ -405,7 +404,6 @@ for(var i of obj){
                 var selector = '';
                     var replace = '';
                     for (var z of i['selector']['popupSelector']){
-                        
                         if ($(z['sel']).length > 0){
                             selector = z['sel'];
                             var attr = z['attr'];
@@ -414,9 +412,7 @@ for(var i of obj){
                                 if ($(selector).attr(attr).replace(replace, '') != ''){
                                     break;
                                 }
-                            }
-                            
-                            
+                            }              
                         }
                     }
 
@@ -428,13 +424,7 @@ for(var i of obj){
                     
                     if (replace != ''){
                         productId = productId.replace(replace, '').trim();
-                        console.log(productId);
-                        console.log('Replace ' + replace);
-
-                    }else{
-                        console.log('Replace e empty');
-                    }
-                    
+                    }         
 
                     type = i['type'];
                     competitor = i['competitor'].split(',')[0]
@@ -445,7 +435,6 @@ for(var i of obj){
                             // A.1.1 - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
                             //    - content finds the id and send it back to popup
                             
-
                                 chrome.runtime.sendMessage({
                                     data: {
                                         "productId": productId,
@@ -462,7 +451,6 @@ for(var i of obj){
                         chrome.runtime.sendMessage({
                             data: {
                                 "notFound": 'notFound',
-                                
                             }
                         }, function (response) {
                             console.log('Not found. Send back: ' + response);   
@@ -483,9 +471,9 @@ for(var i of obj){
         // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
         // - selector of highlight element - highlightElement (different for grid or list layout)
 
-        var timeout = i['timeout']
         console.log('Check if page is products list page');
         
+        var timeout = i['timeout']
         var productsListSelector = '';
         var attrStr = '';
         var replaceStr = '';
@@ -500,18 +488,14 @@ for(var i of obj){
         // A.1 If needed, set timeout (for the pages that loads scripts like yeppon, onlinestore)
         setTimeout(function(){
 
-            // var competitorName = window.location.host.replace('www.', '').split('.')[0];
             var competitorName = i['competitor']
             var typeStr = i['type'];
 
             // A.2 Function that will:
-                            // a - get all selectors
-                            // b - check if id selector is on the page
-                            // c - get all ids into idsStr
-                            // d - send message to background with ids list
-
-
-
+                    // a - get all selectors
+                    // b - check if id selector is on the page
+                    // c - get all ids into idsStr
+                    // d - send message to background with ids list
 
             var highlight = function(){
                 // A.2.a
@@ -535,20 +519,11 @@ for(var i of obj){
                         }else{
                             highlightElement = t['highlightElement']
                         }
-        
-                        // console.log('productsListSelector: ' + productsListSelector);
-                        // console.log('attrStr: ' + attrStr);
-                        // console.log('replaceStr: ' + replaceStr);
-                        // console.log('parentBoxSelector: ' + parentBoxSelector);
-                        // console.log('highlightElement: ' + highlightElement);
-                        // console.log('splitKey: ' + splitKey);
-                        // console.log('listWrapper' + listWrapper);
-                        // console.log('dinamicPage: ' + dinamicPage);
-                        
+         
                         break;
                     }
                 }
-        
+    
                 // A.2.b.
                 // Check productsListSelector array to see if location is on a product list page
                 // If selector exists on page => location on product lists pages
@@ -593,10 +568,10 @@ for(var i of obj){
 
 
             // B. - Get back the message from highlight
-            //   - if data
-            //          - Hightlight elements that have data
-            //   - else
-            //          - add popup for login
+                    // - if data
+                    //     - Hightlight elements that have data
+                    // - else
+                    //     - add popup for login
 
 
 
@@ -604,13 +579,11 @@ for(var i of obj){
                 function(message, sender, sendResponse) {
                     console.log('Message from background: ');
                     console.log(message.data);
+
                     if (message.dataType == 'productList'){
                         if(message.data.data.length){
-                            
                             $(productsListSelector).each(function(){
-                                
                                 for (var r of message.data.data){
-
                                     if (typeStr == 'id'){
                                         idNumber = 'Number'
                                     }else if(typeStr == 'number'){
@@ -618,11 +591,9 @@ for(var i of obj){
                                     }
 
                                     if (attrStr != 'text'){
-                                       
                                         if ($(this).attr(attrStr).indexOf(r[idNumber]) > -1){
                                             var deviationStr = r['Deviation'];
                                             var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-
                                             statusClass = '';
                                             if (deviation < ranges.min){
                                                 statusClass = 'success-info';
@@ -631,17 +602,14 @@ for(var i of obj){
                                             }else{
                                                 statusClass = 'primary-info';
                                             }
-                                            
+
                                             if (parentBoxSelector != highlightElement){
                                                 if (parentBoxSelector == productsListSelector){
-
                                                     $(this).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                                 }else{
-
                                                     $(this).closest(parentBoxSelector).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                                 }
                                             }else if (parentBoxSelector == highlightElement) {
-
                                                 $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
                                             }
                                         }
@@ -649,7 +617,6 @@ for(var i of obj){
                                         if ($(this).text() == r['competitorNumber']){
                                             var deviationStr = r['Deviation'];
                                             var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-
                                             statusClass = '';
                                             if (deviation < ranges.min){
                                                 statusClass = 'success-info';
@@ -680,7 +647,6 @@ for(var i of obj){
                     }
                 }
             );
-
 
             // C. Listen page change for the pages that have dinamicPage = true
             if (dinamicPage){
