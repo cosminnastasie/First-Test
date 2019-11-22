@@ -3,6 +3,9 @@
     "name": "Priceedge competitor pricing",
     "version": "2.0",
     "description": "Eprice - Chrome extension developed by PriceEdge team for monitoring competitor prices",
+    "web_accessible_resources": [
+        "images/*.png", "images/*.gif", "images/*.PNG"
+    ],
     "content_scripts": [
         {
             "matches": [

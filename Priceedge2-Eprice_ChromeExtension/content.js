@@ -386,19 +386,31 @@ let getDeviationUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData
 
 
 
-// ----------- Check login
+// Request login via message
 
 chrome.runtime.sendMessage(
     {request: 'checkLogin', loginUrl: loginUrl}
 )
 
 
-//  ----------- end login check
-
 // -------------------- 1. Get needed informations from obj ---------------------
 
 let competitor = '';
 let type = '';
+
+$(document.body).on('click', '#closePopup', function(){
+    if ($('.private-popup').length > 0){
+        $('.private-popup').remove()
+    }
+});
+
+$(document).click(function(event) { 
+    $target = $(event.target);
+    if(!$target.closest('.private-popup').length) {
+        $('.private-popup').remove();
+    }        
+});
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
     if (message.loginState != null){
@@ -406,12 +418,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         // User not logged in 
 
         if (message.loginState == false){
-            $('body').append('<div id="messagePopup" class="message-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div class="popup-content"><span class="popup-heading">To access the extension, you must first log in to <strong>PriceEdge™</strong>.</span><a href="https://eprice.priceedge.eu/bsLogon.aspx" target="blank" class="private-red-button">Go to log in page</a></div></div>')
-            $(function(){
-                $( "#messagePopup").draggable({
-                    containment: "body"
-                });
-            });
+            setTimeout(function() {
+                    $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row private-actions-row"><span id="closePopup" class="close-popup"></span></div><div id="login" class="popup-center-message vertical-content"><img src="' + chrome.extension.getURL('images/logo-priceedge.png') + '" class="logo"><img src="' + chrome.extension.getURL('images/image.png') + '" class="info-pic"><span class="wait-label">To access the extension, you must first log in to <strong>PriceEdge™</strong>.</span><a href="https://eprice.priceedge.eu/bsLogon.aspx" target="blank" class="private-red-button m-top-12">Go to log in page</a></div></div>')
+                }, 3000);         
         }else{
         // User logged in
 
@@ -419,55 +428,19 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
                 if (i['domain'] == window.location.host || window.location.host.indexOf(i['domain']) > 0 ){
         
-                    
-                    
-        
-                    // ##################### Popup logic ####################
-                    
+
+                    // ############################################### POPUP LOGIC #########################
+                    // ##############################################
+
                     // A. If id is called by popup message:
                     chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-                        console.log(message)
                         
                         // 1. Open/create popup
         
                         if (message['action'] == 'openPopup'){
-                            // if ($('#pricePopup').length <= 0){
-                            //     $('body').append('<div id="pricePopup" class="message-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div></div>')
-                            //     console.log('1');
-                            // }
 
-                            // $(function(){
-                            //     $( "#pricePopup").draggable({
-                            //         containment: "body"
-                            //     });
-                            // });
-                        
-                            // $(document.body).on('click', '#closePopup', function(){
-                            //     if ($('#pricePopup').length > 0){
-                            //         $('#pricePopup').remove()
-                            //     }
-                            // });
-        
-                            // $(document).click(function(event) { 
-                            //     console.log('click');
-                            //     $target = $(event.target);
-                            //     if(!$target.closest('#pricePopup').length && 
-                            //     $('#pricePopup').is(":visible")) {
-                            //     $('#pricePopup').remove();
-                            //     }        
-                            // });
-        
-        
-                            // 2. Make popup draggable
-        
-                            // $(function(){
-                            //     $( "#pricePopup" ).draggable({
-                            //         containment: "body"
-                            //     });
-                            // });
-        
-                            // 3. Add iframe
-                            console.log($('#privateIframe').length)
+                            // 2. Add iframe
+
                             if ($('#privateIframe').length <= 0){
                                 var selector = '';
                                 var replace = '';
@@ -483,12 +456,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                         }              
                                     }
                                 }
+
                                 if ($(selector).length > 0){
                                     if(attr == 'text'){
                                         productId = $(selector).text()
                                     }else{
-                                        console.log(selector);
-                                        console.log($(selector))
                                         productId = $(selector).attr(attr);
                                     }
                                     
@@ -499,62 +471,64 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                     type = i['type'];
                                     competitor = i['competitor'].split(',')[0]
             
-                                    //  A.1 if product id or number is found, it will be sended to popup with type and competitor infos
+                                    //  A.1 if product id or number is found create popup on page context
+
                                     if (typeof productId !== 'undefined'){
                                         if ($('#pricePopup').length <= 0){
-                                            $('body').append('<div id="pricePopup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div></div>')
-                                            console.log('1');
+                                            $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message vertical-content"><div class="message-label">Loading ...</div><img src="'+chrome.extension.getURL('images/wait2.gif')+'" class="wait-img" /></div></div>')
                                         }
             
                                         $(function(){
                                             $( "#pricePopup").draggable({
-                                                containment: "body"
+                                                containment: "html"
                                             });
                                         });
                                         
-                                            // A.1.1 - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
-                                            //    - content finds the id and send it back to popup
-                                                productId = encodeURIComponent(productId)
-                                                src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
-                                                $('#pricePopup').append('<iframe src=' + src + ' id="privateIframe" style="display: none"></iframe>');
-                                                // $('#showGraph').removeClass('hide');
-                                                
-            
-                                                $('iframe#privateIframe').on('load', function(){
-                                                    console.log('Loaded');
-                                                    $(this).show();
-                                                });
-                                            
-                                    //  A.2 If product Id is not found, send back not found message  
+                                        // A.1.1 - When popup is called, create and append iframe to popup
+                                            productId = encodeURIComponent(productId)
+                                            src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
+                                            $('#pricePopup').append('<iframe src=' + src + ' id="privateIframe" style="display: none"></iframe>');                                            
+        
+                                            $('iframe#privateIframe').on('load', function(){
+                                                $('.popup-center-message').remove();
+                                                $(this).show();
+                                            });                                                                                                              
+                                    //  A.2 If product Id is not found, create popup with icecream splash content 
                                     }else{
                                         console.log('Id not found on the page');
+                                        if ($('#pricePopup').length <= 0){
+                                            $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row normal-cursor"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message"><div class="vertical-content"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div></div>')         
+                                        }
                                     } 
                                 }else{
-                                    $('body').append('<div class="message-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div class="popup-content"><span class="popup-heading">Something went wrong. Please reload the page or try another product!</span><a href="https://eprice.priceedge.eu/bsLogon.aspx" target="blank" class="private-red-button">Go to log in page</a></div></div>')
-
+                                    
+                                    if ($('#pricePopup').length <= 0){
+                                        $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row normal-cursor"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message"><div class="vertical-content flex-center"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div></div>')         
+                                    }
                                 }
 
-
-
-                                 
+                                $(document).click(function(event) { 
+                                    $target = $(event.target);
+                                    if(!$target.closest('#pricePopup').length ) {
+                                        $('#pricePopup').remove();
+                                    }        
+                                });
                             }
                         }
                     })
                         
-                    // ############# end Popup logic
+
         
         
         
-                    // ##################### Products-list pages logic ######
+                    // ################################# Products-list pages logic ##############################################################################
         
                     
                     
                     // A. Set selectors from obj: 
                     // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
                     // - selector of highlight element - highlightElement (different for grid or list layout)
-        
-                    console.log('Check if page is products list page');
-                    
+                            
                     var timeout = i['timeout']
                     var productsListSelector = '';
                     var attrStr = '';
@@ -638,7 +612,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                 // ############ Messaging to background
                                 console.log('Ids send to background:');
                                 console.log(idsStr);
-                                console.log(competitorName);
         
                                 chrome.runtime.sendMessage(
                                     {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr, competitorDeviationUrl : getDeviationUrl},
@@ -648,15 +621,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         
                         highlight();
         
-        
                         // B. - Get back the message from highlight
                                 // - if data
                                 //     - Hightlight elements that have data
                                 // - else
                                 //     - add popup for login
-        
-        
-        
+                
                         chrome.runtime.onMessage.addListener(
                             function(message, sender, sendResponse) {
                                 
@@ -726,7 +696,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                     }
                                 }else if(message.dataType == 'loginCheck'){
                                     console.log('Not logged in');
-                                    // $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box" onClick="this.parentNode.parentNode.removeChild(this.parentNode)">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
                                 }
                             }
                         );
@@ -741,13 +710,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                             }, 3000);
                         }
                         
-                    }, timeout
-                    );
-        
-        
-                    
-                // --------------------- End Product-list pages
-                    
+                    }, timeout);
+                            
+                // ---- End Product-list pages
                     break;
                 }
             }
@@ -755,349 +720,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 })
 
-$(document).click(function(event) { 
-    console.log('click');
-    $target = $(event.target);
-    if(!$target.closest('#pricePopup').length && $('#pricePopup').is(":visible")) {
-        $('#pricePopup').remove();
-    } 
-    if(!$target.closest('.message-popup').length && $('.message-popup').is(":visible")) {
-        $('.message-popup').remove();
-    }      
-});
-
-$(function(){
-    $( ".message-popup").draggable({
-        containment: "body"
-    });
-});
-
-$(document.body).on('click', '#closePopup', function(){
-    if ($('#pricePopup').length > 0){
-        $('#pricePopup').remove()
-    }
-    if ($('.message-popup').length > 0){
-        $('.message-popup').remove()
-    }
-});
 
 
 
-if(loginState == true){
-    console.log(loginState);
-    for(var i of obj){
 
-        if (i['domain'] == window.location.host || window.location.host.indexOf(i['domain']) > 0 ){
-
-            
-            
-
-            // ##################### Popup logic ####################
-            
-            // A. If id is called by popup message:
-            chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-                console.log(message)
-                
-                // 1. Open/create popup
-
-                if (message['action'] == 'openPopup'){
-                    if ($('#pricePopup').length <= 0){
-                        $('body').append('<div id="pricePopup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div></div>')
-                        console.log('1');
-                    }
-                
-                    // $(document.body).on('click', '#closePopup', function(){
-                    //     if ($('#pricePopup').length > 0){
-                    //         $('#pricePopup').remove()
-                    //     }
-                    // });
-
-                    // $(document).click(function(event) { 
-                    //     console.log('click');
-                    //     $target = $(event.target);
-                    //     if(!$target.closest('#pricePopup').length && 
-                    //     $('#pricePopup').is(":visible")) {
-                    //     $('#pricePopup').remove();
-                    //     }        
-                    // });
-
-
-                    // 2. Make popup draggable
-
-                    // $(function(){
-                    //     $( "#pricePopup" ).draggable({
-                    //         containment: "body"
-                    //     });
-                    // });
-
-                    // 3. Add iframe
-                    console.log($('#privateIframe').length)
-                    if ($('#privateIframe').length <= 0){
-                        var selector = '';
-                        var replace = '';
-                        for (var z of i['selector']['popupSelector']){
-                            if ($(z['sel']).length > 0){
-                                selector = z['sel'];
-                                var attr = z['attr'];
-                                replace = z['replace']
-                                if ($(selector).attr(attr) != null){
-                                    if ($(selector).attr(attr).replace(replace, '') != ''){
-                                        break;
-                                    }
-                                }              
-                            }
-                        }
-
-                        if(attr == 'text'){
-                            productId = $(selector).text()
-                        }else{
-                            productId = $(selector).attr(attr);
-                        }
-                        
-                        if (replace != ''){
-                            productId = productId.replace(replace, '').trim();
-                        }         
-
-                        type = i['type'];
-                        competitor = i['competitor'].split(',')[0]
-
-                        //  A.1 if product id or number is found, it will be sended to popup with type and competitor infos
-                        if (typeof productId !== 'undefined'){
-                            
-                                // A.1.1 - When popup is opened it sends message with parameters getId=true the content send back the product id/number and type (id or number)
-                                //    - content finds the id and send it back to popup
-                                    productId = encodeURIComponent(productId)
-                                    src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
-                                    $('#pricePopup').append('<iframe src=' + src + ' id="privateIframe" style="display: none"></iframe>');
-                                    // $('#showGraph').removeClass('hide');
-                                    
-
-                                    $('iframe#privateIframe').on('load', function(){
-                                        console.log('Loaded');
-                                        $(this).show();
-                                    });
-                                
-                        //  A.2 If product Id is not found, send back not found message  
-                        }else{
-                            console.log('Id not found on the page');
-                        }  
-                    }
-                }
-            })
-                
-            // ############# end Popup logic
-
-
-
-            // ##################### Products-list pages logic ######
-
-            
-            
-            // A. Set selectors from obj: 
-            // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
-            // - selector of highlight element - highlightElement (different for grid or list layout)
-
-            console.log('Check if page is products list page');
-            
-            var timeout = i['timeout']
-            var productsListSelector = '';
-            var attrStr = '';
-            var replaceStr = '';
-            var parentBoxSelector = '';
-            var highlightElement = '';
-            var splitKey = 0;   
-            var target = '';     
-            var listWrapper = '';
-            var dinamicPage = false;
-
-
-            // A.1 If needed, set timeout (for the pages that loads scripts like yeppon, onlinestore)
-            setTimeout(function(){
-
-                var competitorName = i['competitor']
-                var typeStr = i['type'];
-
-                // A.2 Function that will:
-                        // a - get all selectors
-                        // b - check if id selector is on the page
-                        // c - get all ids into idsStr
-                        // d - send message to background with ids list
-
-                var highlight = function(){
-                    // A.2.a
-                    for (var t of i['selector']['productPageSelector']){
-                        if ($(t['sel']).length > 0){
-                            productsListSelector = t['sel'] + ':not(.item-checked)';
-                            attrStr = t['attr'];
-                            replaceStr = t['replace'];
-                            parentBoxSelector = t['parentBoxSelector']
-                            splitKey = t['splitKey'];
-                            target = t['target']
-                            listWrapper = t['listWrapper'];
-                            dinamicPage = t['dinamicPage']       
-            
-                            if(t['highlightElement'] == ''){
-                                if ($(t['layoutSelectors']['gridLayoutParent']).length){
-                                    highlightElement = t['layoutSelectors']['gridHighlightEl'];
-                                }else if ($(t['layoutSelectors']['listLayoutParent']).length){
-                                    highlightElement = t['layoutSelectors']['listHighlightEl'];
-                                }
-                            }else{
-                                highlightElement = t['highlightElement']
-                            }
-            
-                            break;
-                        }
-                    }
-        
-                    // A.2.b.
-                    // Check productsListSelector array to see if location is on a product list page
-                    // If selector exists on page => location on product lists pages
-                    
-                    var idsStr = '';
-
-                    if ($(productsListSelector).length ){
-
-                        // A.2.c.    
-                        if (target != 'productImage'){
-                            $(productsListSelector).each(function(){
-                                if(attrStr != 'text'){
-                                    if($(this).attr(attrStr) != null){
-                                        idsStr += $(this).attr(attrStr).replace(replaceStr, '') + ',';
-                                    }
-                                }else if(attrStr == 'text'){
-                                    idsStr += $(this).text().replace(replaceStr, '') + ',';
-                                }
-                            });
-                        }else{
-                            $(productsListSelector).each(function(){
-                                var imgSrc = $(this).attr(attrStr).replace(replaceStr, '');
-                                var getIdArr = imgSrc.split('/');
-                                var id = getIdArr[getIdArr.length + splitKey]
-                                idsStr +=  id + ',';
-                            })
-                        }
-                    
-                        // A.2.d 
-                        // ############ Messaging to background
-                        console.log('Ids send to background:');
-                        console.log(idsStr);
-                        console.log(competitorName);
-
-                        chrome.runtime.sendMessage(
-                            {request: 'getData', typeStr: typeStr, competitorName: competitorName, idsStr: idsStr, competitorDeviationUrl : getDeviationUrl},
-                        )
-                    }
-                }
-
-                highlight();
-
-
-                // B. - Get back the message from highlight
-                        // - if data
-                        //     - Hightlight elements that have data
-                        // - else
-                        //     - add popup for login
-
-
-
-                chrome.runtime.onMessage.addListener(
-                    function(message, sender, sendResponse) {
-                        
-                        if (message.dataType == 'productList'){
-                            console.log('Message from background: ');
-                            console.log(message.data);
-
-                            if(message.data.data.length){
-                                $(productsListSelector).each(function(){
-                                    for (var r of message.data.data){
-                                        if (typeStr == 'id'){
-                                            idNumber = 'Number'
-                                        }else if(typeStr == 'number'){
-                                            idNumber = 'competitorNumber';
-                                        }
-
-                                        if (attrStr != 'text'){
-                                            if ($(this).attr(attrStr).indexOf(r[idNumber]) > -1){
-                                                var deviationStr = r['Deviation'];
-                                                var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-                                                statusClass = '';
-                                                if (deviation < ranges.min){
-                                                    statusClass = 'success-info';
-                                                }else if(deviation > ranges.max){
-                                                    statusClass = 'alert-info';
-                                                }else{
-                                                    statusClass = 'primary-info';
-                                                }
-
-                                                if (parentBoxSelector != highlightElement){
-                                                    if (parentBoxSelector == productsListSelector){
-                                                        $(this).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                                    }else{
-                                                        $(this).closest(parentBoxSelector).addClass('parenting').find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                                    }
-                                                }else if (parentBoxSelector == highlightElement) {
-                                                    $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                                }
-                                            }
-                                        }else if(attrStr == 'text'){
-                                            if ($(this).text() == r['competitorNumber']){
-                                                var deviationStr = r['Deviation'];
-                                                var deviation = (parseFloat(r['Deviation'])*100).toFixed(2);
-                                                statusClass = '';
-                                                if (deviation < ranges.min){
-                                                    statusClass = 'success-info';
-                                                }else if(deviation > ranges.max){
-                                                    statusClass = 'alert-info';
-                                                }else{
-                                                    statusClass = 'primary-info';
-                                                }
-
-                                                if (parentBoxSelector != highlightElement){
-                                                    $(this).closest(parentBoxSelector).find(highlightElement).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                                }else{
-                                                    $(this).closest(parentBoxSelector).addClass('item-parent-box ' + statusClass).append('<span class="item-info-text"><span class="' + statusClass + '">' + deviation + ' %</span></span>');
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                    $(this).addClass('item-checked');
-                                });
-                                
-                            }else{
-                                console.log('No data from background');
-                            }
-                        }else if(message.dataType == 'loginCheck'){
-                            console.log('Not logged in');
-                            $('body').append('<div class="info-alert-box"><div class="content-box-info"><span class="private-box-label" ><h2>To access the extension,</h2> <div>you must first log in to <strong>PriceEdge™</strong></div></span></div><span class="close-info-box" onClick="this.parentNode.parentNode.removeChild(this.parentNode)">&#10006;</span><div class="footer-box"><a href="'+login+'" class="private-red-button" target="blank">Go to log in page</a></div></div>');
-                        }
-                    }
-                );
-
-                // C. Listen page change for the pages that have dinamicPage = true
-                if (dinamicPage){
-                    setInterval(function(){
-                        console.log('Changed items number: ' + $(productsListSelector).length);
-                        if($(productsListSelector).length){
-                            highlight();
-                        };
-                    }, 3000);
-                }
-                
-            }, timeout
-            );
-
-
-            
-        // --------------------- End Product-list pages
-            
-            break;
-        }
-    }
-
-
-}
 
    
 
