@@ -411,10 +411,15 @@ $(document).click(function(event) {
     }        
 });
 
+$(window).blur(function(e) {
+    setTimeout(function(){
+        $('.private-popup').remove();
+    }, 100)
+});
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
     if (message.loginState != null){
-
         // User not logged in 
 
         if (message.loginState == false){
