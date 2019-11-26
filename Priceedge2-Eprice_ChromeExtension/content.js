@@ -411,11 +411,13 @@ $(document).click(function(event) {
     }        
 });
 
-$(window).blur(function(e) {
-    setTimeout(function(){
+// Hide popup on tab focus loose
+var checkWindowVisibility = setInterval(function(){
+    if (document.hidden) {
         $('.private-popup').remove();
-    }, 100)
-});
+    }
+}, 1000)
+
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
