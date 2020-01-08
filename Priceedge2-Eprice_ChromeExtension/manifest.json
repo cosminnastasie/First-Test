@@ -25,7 +25,7 @@
                 // "https://eprice.priceedge.eu/*",
                 "https://www.expertonline.it/*"
             ],
-            "js": [ "js/jquery.js", "js/jquery-ui.min.js", "content.js"],
+            "js": [ "js/jquery.js", "js/jquery-ui.min.js", "js/ag-grid.min.js", "content.js"],
             "css": ["css/jquery-ui.min.css", "css/content.css"]
         }
     ],

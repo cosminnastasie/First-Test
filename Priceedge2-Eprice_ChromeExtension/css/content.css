@@ -29,6 +29,20 @@
     z-index: ;
 }
 
+#login {
+    width: 100%;
+    position: relative;
+    top: 0;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.centered-text {
+    display: block;
+    text-align: center;
+    padding: 0 30px;
+}
+
 .item-info-text span{
     font-size: 13px;
     padding: 2px;
@@ -140,22 +154,15 @@
     background-color: #fff;
     border: 1px solid #cbd6e2;
     background: #fff;
-    min-height: 600px;
+    min-height: 340px;
+    padding-bottom: 12px;
     position: fixed;
     right: 40px;
     top: 10px;
     width: 550px;
     z-index: 999999;
-}
-
-#pricePopup iframe{
-    width: 100%;
-    height: 600px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    position: relative;
-    z-index:3;
+    color: hsl(211, 28%, 36%) !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .private-actions-row {
@@ -172,6 +179,8 @@
     padding: 0 3px;
     z-index: 9;
     width: -webkit-fill-available;
+    color: hsl(211, 28%, 36%) !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .normal-cursor {
@@ -183,12 +192,13 @@
 }
 
 .popup-center-message {
-    min-height: 550px;
+    min-height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #425b76;
     font-size: 15px;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .vertical-content {
@@ -198,6 +208,9 @@
 
 .popup-center-message > div {
     line-height: 30px;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+    
 }
 
 .private-actions-row > span {
@@ -228,6 +241,9 @@
     top: 10px;
     width: 400px;
     z-index: 999999;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+
 }
 
 .popup-content {
@@ -236,17 +252,26 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .popup-heading {
-    color: #425b76;
     margin-bottom: 36px;
     font-size: 16px;
     text-align: center;
+    
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+
 }
 
 .message-popup .popup-heading {
     padding: 0 20px;
+    
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .logo{
@@ -254,7 +279,7 @@
 }
 
 .info-pic{
-    width: 370px;
+    width: 300px;
 }
 
 .wait-img{
@@ -263,13 +288,14 @@
 } 
 
 .error-img{
-    width: 150px;
+    width: 130px;
     margin-bottom: 40px;
 }
 
 .message-label {
-    color: #425b76;
     font-size: 16px;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
 }
 
 .m-top-12 {
@@ -279,3 +305,216 @@
 .flex-center {
     align-items: center;
 }
+
+.item-name{
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    padding: 6px 0 0 0;
+    font-weight: 500;
+    min-height: 26px;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.item-prices-info {
+    padding: 6px 0;
+    display: flex;
+    /* border-bottom: 1px solid lightgrey; */
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.item-prices-info>span {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.item-prices-info .item-label {
+    margin-right: 0 !important;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.item-label {
+    font-size: 14px;
+    color: #33475b;
+    display: block;
+    letter-spacing: .3px;
+    line-height: 24px !important;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.item-prices-info .item-value {
+    font-size: 18px;
+    font-weight: 500;
+    min-height: 24px;
+    margin-right: 0 !important;
+    letter-spacing: .3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.footer-row {
+    padding-top: 20px;
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    bottom: 12px;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.columns-row {
+    width: 100%;
+    border-bottom: 1px solid lightgrey;
+}
+
+.flex-block {
+    padding: 6px 0;
+    display: flex;
+}
+
+.centered-block {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.footer-row .logo{
+    width: 188px;
+}
+
+.footer-row .item-label {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 20px !important;
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.footer-row .item-value {
+    font-size: 14px;
+    min-height: 20px;
+    
+    color: #425b76 !important;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+}
+
+.footer-row .private-red-button {
+    margin-top: 7px;
+    height: unset !important;
+    line-height: 32px;
+    padding: 0 20px !important;
+}
+
+.private-red-button:hover {
+    background-color: #e12843 !important;
+    border: 1px solid #e12843 !important;
+    color: #fff !important;
+}
+
+.item-prices-info>span, .flex-block>span {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+}
+
+.m-bottom-3 {
+    margin-bottom: 12px!important;
+}
+
+.footer-row a, .footer-row a:hover {
+    text-decoration: none !important;
+}
+
+.ag-theme-balham  .ag-header-cell {
+    background: #f5f8fa !important;
+    font-size: 14px !important;
+    padding-left: 12px;
+    /* font-size: 13px !important; */
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: left;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
+    /* height: 42px; */
+    border-bottom: 2px solid #eaeaea;
+    color: #383E45 !important;
+}
+
+.ag-theme-balham .ag-cell {
+    line-height: 32px !important;
+    color: #454D59 !important;
+    background-color: #FFFFFF !important;
+    border: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    padding: 0 12px;
+    font-size: 13px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 85px;
+}
+
+.ag-theme-balham .ag-floating-bottom  .ag-cell{
+    font-weight:bold !important;
+}
+
+.ag-theme-balham .ag-header,
+.ag-theme-balham .ag-floating-bottom .ag-cell {
+    background: #f5f8fa !important;
+}
+
+.ag-cell a  {
+    text-decoration: none !important;
+    color: #0091ae !important;
+}
+
+.ag-cell a:hover {
+    text-decoration: underline !important;
+}
+
+.icon-oks{
+    color: #e7556a;
+    font-size: 17px;
+    font-weight: bolder !important;
+}
+
+.icon-cross{
+    font-size: 24px;
+    font-weight: bolder !important;
+    color: #0091ae;
+}
+
+.success-color, .success-color span {
+    color: #0091ae !important;
+}
+
+.default-color{
+    color: #425b76;
+}
+
+.alert-color, .alert-color span {
+    color: #e7556a;
+}
+
+

@@ -28,6 +28,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     console.log('Message received');
     // Check login
     if (message.request == "checkLogin"){
+        
         loginUrl = message.loginUrl
 
         $.ajax({
@@ -93,6 +94,26 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 
             }
         })
+    }
+
+    if (message.request == 'getProductData'){
+        console.log(message.url);
+        $.ajax({
+            method: 'POST',
+            data: {},
+            cache: false,
+            url: message.url
+        }).done(function(data){
+            console.log('Data: ', data);
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                if (tabs.length){
+                    console.log('Tabs ok')
+                    chrome.tabs.sendMessage(tabs[0].id,{'data': data, 'dataType': 'competitorPrices'});  
+                }else{
+                    console.log('No tab identified');
+                }
+            });
+        });
     }
 
 });

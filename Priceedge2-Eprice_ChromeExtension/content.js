@@ -380,10 +380,10 @@ let obj = [
 let loginUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting';
 let login = 'https://eprice.priceedge.eu';
 let getDeviationUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorDeviation';
-
+let getCompetitorPricesUrl = 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=ChromeExtension.GetCompetitorDeviation&rdDataID=competitorPrices&'
+let waitImage = '<div class="popup-center-message vertical-content" id="loadingData"><div class="message-label">Loading ...</div><img src="'+chrome.extension.getURL('images/wait2.gif')+'" class="wait-img" /></div>'
 
 // ##################### end Chrome extension settings
-
 
 
 // Request login via message
@@ -399,29 +399,27 @@ let competitor = '';
 let type = '';
 
 $(document.body).on('click', '#closePopup', function(){
-    if ($('.private-popup').length > 0){
-        $('.private-popup').remove()
-    }
+    $('#pricePopup').hide();
 });
 
 $(document).click(function(event) { 
     $target = $(event.target);
-    if(!$target.closest('.private-popup').length) {
-        $('.private-popup').remove();
+    if(!$target.closest('#pricePopup').length) {
+        $('#pricePopup').hide();
     }        
 });
 
 // Hide popup on tab focus loose
 var checkWindowVisibility = setInterval(function(){
     if (document.hidden) {
-        $('.private-popup').remove();
+        $('#pricePopup').hide();
     }
 }, 1000)
 
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-
     if (message.loginState != null){
+
         // User not logged in 
 
         if (message.loginState == false){
@@ -429,13 +427,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                     $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row private-actions-row"><span id="closePopup" class="close-popup"></span></div><div id="login" class="popup-center-message vertical-content"><img src="' + chrome.extension.getURL('images/logo-priceedge.png') + '" class="logo"><img src="' + chrome.extension.getURL('images/image.png') + '" class="info-pic"><span class="wait-label">To access the extension, you must first log in to <strong>PriceEdge™</strong>.</span><a href="https://eprice.priceedge.eu/bsLogon.aspx" target="blank" class="private-red-button m-top-12">Go to log in page</a></div></div>')
                 }, 3000);         
         }else{
-        // User logged in
-
+            // User logged in
             for(var i of obj){
 
                 if (i['domain'] == window.location.host || window.location.host.indexOf(i['domain']) > 0 ){
         
-
                     // ############################################### POPUP LOGIC #########################
                     // ##############################################
 
@@ -445,10 +441,18 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                         // 1. Open/create popup
         
                         if (message['action'] == 'openPopup'){
+                            console.log('Open popup');
+                            if($('#pricePopup').length <= 0){
+                                
+                                $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div id="pricesGrid" style="width:550px" class="ag-theme-balham"></div> ' + waitImage + '</div>');
 
-                            // 2. Add iframe
+                                $(function(){
+                                    $( "#pricePopup").draggable({
+                                        containment: "html",
+                                        handle: '.private-actions-row'
+                                    });
+                                });
 
-                            if ($('#privateIframe').length <= 0){
                                 var selector = '';
                                 var replace = '';
                                 for (var z of i['selector']['popupSelector']){
@@ -463,7 +467,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                         }              
                                     }
                                 }
-
                                 if ($(selector).length > 0){
                                     if(attr == 'text'){
                                         productId = $(selector).text()
@@ -474,64 +477,175 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                     if (replace != ''){
                                         productId = productId.replace(replace, '').trim();
                                     }         
-            
+                        
                                     type = i['type'];
                                     competitor = i['competitor'].split(',')[0]
-            
-                                    //  A.1 if product id or number is found create popup on page context
-
+                                    
                                     if (typeof productId !== 'undefined'){
-                                        if ($('#pricePopup').length <= 0){
-                                            $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message vertical-content"><div class="message-label">Loading ...</div><img src="'+chrome.extension.getURL('images/wait2.gif')+'" class="wait-img" /></div></div>')
-                                        }
+                                        productId = encodeURIComponent(productId)
+                                        src = getCompetitorPricesUrl + 'productId=' + productId + '&type=' + type + '&competitor=' + competitor;
+                                        chrome.runtime.sendMessage(
+                                            {request: 'getProductData', url: src}
+                                        )
+
+                                        chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+                                            if (message.dataType == "competitorPrices"){
+
+                                                // Data should be available here
+                                                if (JSON.parse(message.data).data[0]){
+                                                    let productData = JSON.parse(message.data).data[0];
+                                                    
+                                                    //Load popup html
+
+                                                    //Load header
+                                                
+                                                    let header = '<span class="item-name"><span>' + productData.Item_Name + '</span></span>';
+                                                    $('#pricesGrid').before(header);
+
+                                                    //Load subheader
+
+                                                    let subHeader = '<span class="item-prices-info"><span><span class="item-label">PRICE</span><span class="item-value">'+parseFloat(productData.Item_Price).toFixed(2)+'</span></span><span><span class="item-label"> SHIPPING PRICE</span><span class="item-value">'+parseFloat(productData.Item_ShippingPrice).toFixed(2)+'</span></span><span><span class="item-label">TOTAL PRICE</span><span class="item-value">'+parseFloat(productData.Item_TotalPrice).toFixed(2)+'</span></span></span>'
+                                                    
+                                                    $('#pricesGrid').before(subHeader);
+
+                                                    //Load table
+                                                    if(productData.competitorsPrices == ''){
+                                                        $('#pricesGrid').before('<span class="centered-block">No match for this item!</span>');
+                                                    }else{
+                                                        let tableData = JSON.parse(productData.competitorsPrices);
+                                                        const priceAvg = tableData.reduce((a, {Price}) => a + Price, 0) / tableData.length;
+                                                        const diffAvg = tableData.reduce((a, {Diff}) => a + Diff, 0) / tableData.length;
+                                                        const shippingAvg = tableData.reduce((a, {Shipping}) => a + Shipping, 0) / tableData.length;
+                                                        const totalAvg = tableData.reduce((a, {Total}) => a + Total, 0) / tableData.length;
+                                                        const diffTotalAvg = tableData.reduce((a, {DiffTotal}) => a + DiffTotal, 0) / tableData.length;
+
+                                                        //Load the table
+                                                        var columnDefs = [
+                                                            {headerName: "COMPETITOR", field: "CompetitorName",
+                                                                cellRenderer: function(params) {
+                                                                    if (params.data.Url != ''){
+                                                                        return '<a target="_blank" href="' + params.data.Url + '"' + '>' + params.value + '</a>';
+                                                                    }else{
+                                                                        return '<span class="default-color">' + params.value + '</span>';
+                                                                    }
+                                                                }
+                                                            },
+                                                            {headerName: "PRICE", field: "Price", 
+                                                                valueFormatter: function(params) {
+                                                                    return params.value.toFixed(2);
+                                                                },                                                                  
+                                                            },
+                                                            {headerName: "DIFF", field: "Diff", 
+                                                                cellStyle: function(params) {
+                                                                    if (params.value < 0) {
+                                                                        return {color: '#0091ae !important'};
+                                                                    } else {
+                                                                        return {color: '#e7556a !important'};
+                                                                    }
+                                                                },
+                                                                valueFormatter: function(params) {
+                                                                    let sign = ''
+                                                                    if (params.value > 0 ){sign = '+' }
+                                                                    return sign + params.value.toFixed(2) + '%';
+                                                                }
+                                                            },
+                                                            {headerName: "Shipping Cost", field: "Shipping",
+                                                                valueFormatter: function(params) {
+                                                                    return params.value.toFixed(2);
+                                                                }, 
+                                                            },
+                                                            {headerName: "TOTAL", field: "Total", 
+                                                                valueFormatter: function(params) {
+                                                                    return params.value.toFixed(2);
+                                                                },
+                                                            },
+                                                            {headerName: "DIFF TOTAL", field: "DiffTotal", 
+                                                                cellStyle: function(params) {
+                                                                    if (params.value < 0) {
+                                                                        return {color: '#0091ae !important'};
+                                                                    } else {
+                                                                        return {color: '#e7556a !important'};
+                                                                    }
+                                                                },
+                                                                valueFormatter: function(params) {
+                                                                    let sign = ''
+                                                                    if (params.value > 0 ){sign = '+' }
+                                                                    return sign + params.value.toFixed(2) + '%';
+                                                                }
+                                                            },
+                                                            {headerName: "Availability", field: "Available",
+                                                                cellRenderer: function(params){
+                                                                    if (params.value == 1){
+                                                                        return '<span class="icon-oks">&#10003;</span>'
+                                                                    }else if(params.value == 0){
+                                                                        return '<span class="icon-cross">&#xd7;</span>'
+                                                                    }else{
+                                                                        return ''
+                                                                    }
+                                                                },
+                                                                width: 50, suppressSizeToFit: true
+                                                            }
+                                                        ];
             
-                                        $(function(){
-                                            $( "#pricePopup").draggable({
-                                                containment: "html"
-                                            });
-                                        });
-                                        
-                                        // A.1.1 - When popup is called, create and append iframe to popup
-                                            productId = encodeURIComponent(productId)
-                                            src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
-                                            $('#pricePopup').append('<iframe src=' + src + ' id="privateIframe" style="display: none"></iframe>');                                            
-        
-                                            $('iframe#privateIframe').on('load', function(){
-                                                $('.popup-center-message').remove();
-                                                $(this).show();
-                                            });                                                                                                              
-                                    //  A.2 If product Id is not found, create popup with icecream splash content 
+                                                        var gridOptions = {
+                                                            defaultColDef: {
+                                                                sortable: true
+                                                            },
+                                                            columnDefs: columnDefs,
+                                                            rowData: tableData,
+                                                            domLayout:'autoHeight',
+                                                            onFirstDataRendered: function(params) {
+                                                                params.api.sizeColumnsToFit();
+                                                            },
+                                                            pinnedBottomRowData: [
+                                                                {
+                                                                    CompetitorName: "Avg. Price",
+                                                                    Price: priceAvg,
+                                                                    Diff: diffAvg,
+                                                                    Shipping: shippingAvg,
+                                                                    Total: totalAvg,
+                                                                    DiffTotal: diffTotalAvg,
+                                                                    Available: 2,
+                                                                    Url: "",}
+                                                            ],
+                                                            rowHeight: 32,
+                                                            animateRows: true
+                                                        };
+                                                        var gridDiv = document.querySelector('#pricesGrid');
+                                                        new agGrid.Grid(gridDiv, gridOptions);
+                                                    }
+
+                                                    //Load footer
+
+                                                    let footer = '<div class="footer-row"><span class="flex-block columns-row m-bottom-3"><span><span class="item-label">INTERNAL ID:</span><span class="item-value">'+productData.Item_InternalId+'</span></span><span><span class="item-label">MFGR ID:</span><span class="item-value">'+productData.Item_Mpn+'</span></span></span><span class="logo-box"><img src="' + chrome.extension.getURL('images/logo-priceedge.png') + '" class="logo"></span><a href="https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&amp;itemNumberTimeline=' +productData.itemNumber + '" id="goToTimeline" target="blank"><span id="showGraph" class="private-red-button ">SHOW GRAPH</span></a></div>';
+
+                                                    $('#pricesGrid').after(footer);
+                                                    
+                                                    $('#loadingData').remove();
+                                                }else{
+                                                    $('#loadingData').remove();
+                                                    $('#pricePopup').append('<div class="popup-center-message"><div class="vertical-content flex-center"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span class="centered-text">Sorry. Something went wrong. Try to reload the page or pick another product!</span></div></div>')
+                                                    console.log('Nothing found!')
+                                                }
+                                            }
+                                        })
                                     }else{
                                         console.log('Id not found on the page');
-                                        if ($('#pricePopup').length <= 0){
-                                            $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row normal-cursor"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message"><div class="vertical-content"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div></div>')         
-                                        }
-                                    } 
+                                        $('#loadingData').remove();
+                                        $('#pricePopup').append('<div class="popup-center-message"><div class="vertical-content flex-center"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div>')           
+                                    }           
                                 }else{
-                                    
-                                    if ($('#pricePopup').length <= 0){
-                                        $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row normal-cursor"><span id="closePopup" class="close-popup"></span></div><div class="popup-center-message"><div class="vertical-content flex-center"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div></div>')         
-                                    }
+                                    $('#loadingData').remove();
+                                    $('#pricePopup').append('<div class="popup-center-message"><div class="vertical-content flex-center"><img src="' + chrome.extension.getURL('images/icecream-error.png') + '" class="error-img"><span>Sorry. The system isn"t tracking this page.</span></div></div>')         
                                 }
-
-                                $(document).click(function(event) { 
-                                    $target = $(event.target);
-                                    if(!$target.closest('#pricePopup').length ) {
-                                        $('#pricePopup').remove();
-                                    }        
-                                });
+                            }else{
+                                $('#pricePopup').show();
                             }
-                        }
+                        }  
                     })
-                        
 
-        
-        
-        
                     // ################################# Products-list pages logic ##############################################################################
-        
-                    
-                    
+ 
                     // A. Set selectors from obj: 
                     // - selector used for id extraction - productsListSelector + attribute to extract + replaceStr (if needed)
                     // - selector of highlight element - highlightElement (different for grid or list layout)
@@ -546,7 +660,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                     var target = '';     
                     var listWrapper = '';
                     var dinamicPage = false;
-        
+                    console.log('Timeout',timeout )
         
                     // A.1 If needed, set timeout (for the pages that loads scripts like yeppon, onlinestore)
                     setTimeout(function(){
