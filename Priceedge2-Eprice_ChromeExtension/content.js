@@ -444,7 +444,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                             console.log('Open popup');
                             if($('#pricePopup').length <= 0){
                                 
-                                $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div id="pricesGrid" style="width:550px" class="ag-theme-balham"></div> ' + waitImage + '</div>');
+                                $('body').append('<div id="pricePopup" class="private-popup"><div class="private-actions-row"><span id="closePopup" class="close-popup"></span></div><div id="pricesGrid" style="width:560px" class="ag-theme-balham"></div> ' + waitImage + '</div>');
 
                                 $(function(){
                                     $( "#pricePopup").draggable({
@@ -521,19 +521,23 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
                                                         //Load the table
                                                         var columnDefs = [
-                                                            {headerName: "COMPETITOR", field: "CompetitorName",
+                                                            {   
+                                                                headerName: "COMPETITOR", field: "CompetitorName",
                                                                 cellRenderer: function(params) {
                                                                     if (params.data.Url != ''){
-                                                                        return '<a target="_blank" href="' + params.data.Url + '"' + '>' + params.value + '</a>';
+                                                                        return '<a target="_blank" href="' + params.data.Url + '" tooltip="'+params.value+'"' + '>' + params.value + '</a>';
                                                                     }else{
                                                                         return '<span class="default-color">' + params.value + '</span>';
                                                                     }
-                                                                }
+                                                                },
+                                                                width:120, suppressSizeToFit: true, headerTooltip: 'Competitor', tooltipValueGetter: (params) => params.value
                                                             },
-                                                            {headerName: "PRICE", field: "Price", 
+                                                            {
+                                                                headerName: "PRICE", field: "Price", 
                                                                 valueFormatter: function(params) {
                                                                     return params.value.toFixed(2);
-                                                                },                                                                  
+                                                                }, 
+                                                                headerTooltip: 'Price', width: 80, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value
                                                             },
                                                             {headerName: "DIFF", field: "Diff", 
                                                                 cellStyle: function(params) {
@@ -547,19 +551,25 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                                                     let sign = ''
                                                                     if (params.value > 0 ){sign = '+' }
                                                                     return sign + params.value.toFixed(2) + '%';
-                                                                }
+                                                                }, 
+                                                                headerTooltip: 'Diff', width: 73, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value.toFixed(2) + '%'
                                                             },
-                                                            {headerName: "Shipping Cost", field: "Shipping",
+                                                            {
+                                                                headerName: "Shipping Cost", field: "Shipping",
                                                                 valueFormatter: function(params) {
                                                                     return params.value.toFixed(2);
                                                                 }, 
+                                                                headerTooltip: 'Shipping Cost', width: 75, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value
                                                             },
-                                                            {headerName: "TOTAL", field: "Total", 
+                                                            {
+                                                                headerName: "TOTAL", field: "Total", 
                                                                 valueFormatter: function(params) {
                                                                     return params.value.toFixed(2);
-                                                                },
+                                                                }, 
+                                                                headerTooltip: 'Total', width: 80, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value
                                                             },
-                                                            {headerName: "DIFF TOTAL", field: "DiffTotal", 
+                                                            {
+                                                                headerName: "DIFF TOTAL", field: "DiffTotal", 
                                                                 cellStyle: function(params) {
                                                                     if (params.value < 0) {
                                                                         return {color: '#0091ae !important'};
@@ -571,9 +581,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                                                     let sign = ''
                                                                     if (params.value > 0 ){sign = '+' }
                                                                     return sign + params.value.toFixed(2) + '%';
-                                                                }
+                                                                }, 
+                                                                headerTooltip: 'Diff Total', width: 80, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value.toFixed(2) + '%'
                                                             },
-                                                            {headerName: "Availability", field: "Available",
+                                                            {
+                                                                headerName: "Availability", field: "Available",
                                                                 cellRenderer: function(params){
                                                                     if (params.value == 1){
                                                                         return '<span class="icon-oks">&#10003;</span>'
@@ -582,8 +594,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                                                                     }else{
                                                                         return ''
                                                                     }
-                                                                },
-                                                                width: 50, suppressSizeToFit: true
+                                                                }, 
+                                                                headerTooltip: 'Availability', width: 50, suppressSizeToFit: true, tooltipValueGetter: (params) => params.value
                                                             }
                                                         ];
             

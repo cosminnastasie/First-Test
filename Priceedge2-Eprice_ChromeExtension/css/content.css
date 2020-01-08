@@ -159,7 +159,7 @@
     position: fixed;
     right: 40px;
     top: 10px;
-    width: 550px;
+    width: 560px;
     z-index: 999999;
     color: hsl(211, 28%, 36%) !important;
     font-family: 'Segoe UI', 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Arial', 'sans-serif' !important;
@@ -445,7 +445,7 @@
     text-decoration: none !important;
 }
 
-.ag-theme-balham  .ag-header-cell {
+.ag-theme-balham .ag-header-cell {
     background: #f5f8fa !important;
     font-size: 14px !important;
     padding-left: 12px;
@@ -472,7 +472,7 @@
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 85px;
+    /* max-width: 85px; */
 }
 
 .ag-theme-balham .ag-floating-bottom  .ag-cell{
@@ -498,6 +498,21 @@
     font-size: 17px;
     font-weight: bolder !important;
 }
+
+.ag-row:hover,
+.ag-row:hover .ag-cell{
+    background: #f5f8fa !important;
+}
+
+.ag-tooltip{
+    background-color: #fff  !important;
+    color: #454D59;
+    border-radius: 1px;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #545454;
+ }
 
 .icon-cross{
     font-size: 24px;
