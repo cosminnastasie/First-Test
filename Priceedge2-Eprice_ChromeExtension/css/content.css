@@ -494,7 +494,7 @@
 }
 
 .icon-oks{
-    color: #e7556a;
+    color: #0091ae;
     font-size: 17px;
     font-weight: bolder !important;
 }
@@ -515,9 +515,9 @@
  }
 
 .icon-cross{
+    color: #e7556a;
     font-size: 24px;
     font-weight: bolder !important;
-    color: #0091ae;
 }
 
 .success-color, .success-color span {
