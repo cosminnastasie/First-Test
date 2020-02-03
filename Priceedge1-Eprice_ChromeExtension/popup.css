@@ -1,6 +1,6 @@
 html, iframe, #rdMainBody{
     width: 550px;
-    height: 595px;
+    height: 596px;
 }
 
 iframe, body {
@@ -83,7 +83,6 @@ iframe{
 	display: flex;
     border-radius: 3px !important;
     font-size: 14px !important;
-    /* height: 36px!important; */
     cursor: pointer;
     padding-top: 6px !important;
     padding-bottom: 8px !important;

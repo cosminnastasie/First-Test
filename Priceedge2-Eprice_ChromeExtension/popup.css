@@ -1,0 +1,107 @@
+html, iframe, #rdMainBody{
+    width: 550px;
+    height: 596px;
+}
+
+iframe, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.wait-panel{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+}
+
+.centered-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.wait-label {
+    color: #425b76;
+    font-size: 16px;
+}
+
+.wait-img{
+    width: 60px;
+    margin-top: 25px;
+} 
+
+.wait-description{
+    color: #425b76;
+    font-size: 16px;
+    text-transform: lowercase;
+}
+
+iframe{
+    position: relative;
+    z-index:3;
+}
+
+.hide {
+    display: none;
+} 
+
+.center-text{
+    max-width: 64%;
+    text-align: center;
+}
+
+.centered-box.hide {
+    display: none;
+}
+
+.centered-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-box .error-img{
+    width: 150px;
+    margin-bottom: 40px;
+}
+
+.private-red-button,
+.private-red-button:hover,
+.private-red-button:active,
+.private-red-button:focus{	
+	background-color: #e7556a !important;
+    border: 1px solid #e7556a !important;
+    color: #fff !important;
+	display: flex;
+    border-radius: 3px !important;
+    font-size: 14px !important;
+    cursor: pointer;
+    padding-top: 6px !important;
+    padding-bottom: 8px !important;
+    padding-right: 22px !important;
+    padding-left: 22px !important;
+    margin-top: 8px;
+    z-index: 4;
+    text-decoration: none;
+}
+
+#login .private-red-button{
+    position: relative;
+    top: 61px;
+}
+
+.logo{
+    width: 205px;
+}
+
+.info-pic{
+    width: 370px;
+}

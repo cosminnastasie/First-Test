@@ -1,14 +1,7 @@
+// ###################### Popup Settings
+
 console.log('Popup js loaded');
 
-let message = {
-    "getId": true
-};
-let params = {
-    active: true,
-    currentWindow: true
-}
-
-// This should be set for each chrome extension
 let domains = [
     'https://www.eprice.it/',
     'https://monclick.it/',
@@ -19,6 +12,7 @@ let domains = [
     'https://www.unieuro.it/',
     'https://www.euronics.it/',
     'https://www.trony.it/online',
+    'https://www.expertonline.it/'
 ]
 
 let blackUrlsList = [
@@ -26,12 +20,18 @@ let blackUrlsList = [
     'https://www.eprice.it/prodotti/'
 ]
 
+// ################### end Chrome settings
+
+let params = {
+    active: true,
+    currentWindow: true
+}
+
 function checkUrl(url){
     let allowed = false;
 
     // 1. check domains
     for (var u of domains){
-        
             if(url.indexOf(u) != -1 && url != u){
                 allowed = true;
             }     
@@ -58,13 +58,13 @@ function IsJsonString(str) {
     return true;
 }
 
-
 // Check if looged in
 
 $.ajax({
     method: 'POST',
     url: 'https://eprice.priceedge.eu/rdTemplate/rdData.aspx?rdData=System&rdDataID=GetUserSetting'
 }).done(function(data){
+
     if (IsJsonString(data)){
         
         // 1. When Popup is called it checks if the url is inside an allowed domain -> send the message to content to get the product Id or competitor Number
@@ -74,51 +74,42 @@ $.ajax({
         chrome.tabs.query(query,function (tabs) {
             currentTab = tabs[0]; // there will be only one in this array  
             url =  currentTab['url']         
-            
             if (checkUrl(url)){
-
+                var message = {
+                    "getId": true
+                };
                 chrome.tabs.query(params, function(tabs){
                     chrome.tabs.sendMessage( tabs[0].id, message);
                     console.log('Popup sended message');
                 })
-
             }else{
                 $('#notTracking').removeClass('hide');
                 $('#waitPanel').hide();
             }
         })
-
-
-
     }else{
         console.log('User is Logged Out');
-
         $('#waitPanel').addClass('hide');
         $('#login').removeClass('hide');
     }
-    
 })
 
 
 
-// 3. Content send product Id to popup which sets call priceedge into iframe and set Id on src
+// 2. Content send product Id to popup which sets call priceedge into iframe and set Id on src
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log('Message received');
-    console.log(message);
-    productId = message['data'].productId;
+    if (message['data']){
+        productId = message['data'].productId;
+    }
     var type = message['data'].type;
     var competitor = message['data'].competitor;
-
-
     if(message['data'].productId != undefined){
         productId = encodeURIComponent(productId)
-        console.log(productId);
-        // src = 'http://localhost/Blueberry/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
         src = 'https://eprice.priceedge.eu/rdPage.aspx?rdReport=Setup.ChromeCompetitorPrices' + '&productId=' + productId + '&type=' + type + '&competitor=' + competitor;
-        
         $('body').append('<iframe src=' + src + ' id="privateIframe"></iframe>');
         $('#showGraph').removeClass('hide');
-    
     }else{
         $('#notTracking').html('<img src="images/icecream-error.png" class="error-img"><span>Product id not found on page. Please reload the page or try another product!</span>').removeClass("hide");
         $('#waitPanel').hide();
@@ -128,19 +119,15 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 
 
-// 4. Show graphic (Timeline view)
+// 3. Show graphic (Timeline view)
 $(document).ready(function(){
-
 
     $('#showGraph').on('click', function(){
         console.log('Show graph');
         var query = { active: true, currentWindow: true };
                   
-        console.log(currentTab);
-
         // Create Graphic popup
         chrome.windows.create(
-            // {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "normal", width: 1100, height: 606, left: 20, top: 400}
             {url: "https://eprice.priceedge.eu/rdPage.aspx?rdReport=Home.Timeline&itemNumberTimeline=" + productId + '#callChangelogCharts', type: "popup", width: 1100, height: 606, left: 20, top: 400}
         );        
     });
